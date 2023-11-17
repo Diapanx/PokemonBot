@@ -1,20 +1,18 @@
 package edu.northeastern.cs5500.starterbot.model;
 
-import javax.annotation.Nonnull;
-
 import org.bson.types.ObjectId;
 
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor
 public class Item implements Model {
-    @Nonnull
+
     ObjectId id = new ObjectId();
 
-    @Nonnull
     String name;
-    @Nonnull
     String description;
+
+    public Item(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 
     public ObjectId getId() {
         return id;
