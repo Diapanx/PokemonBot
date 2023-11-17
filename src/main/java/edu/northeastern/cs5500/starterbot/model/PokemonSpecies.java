@@ -1,23 +1,18 @@
 package edu.northeastern.cs5500.starterbot.model;
 
+import javax.annotation.Nonnull;
 import lombok.Data;
 import lombok.NonNull;
 
-import javax.annotation.Nonnull;
-
 @Data
 public class PokemonSpecies {
-    @NonNull
-    final Integer pokedexNumber;
+    @NonNull final Integer pokedexNumber;
 
-    @Nonnull
-    final String imageUrl;
+    @Nonnull final String imageUrl;
 
-    @Nonnull
-    final String name;
+    @Nonnull final String name;
 
-    @Nonnull
-    final PokemonType[] types;
+    @Nonnull final PokemonType[] types;
 
     MoveEffectiveness getEffectiveness(PokemonType attackType) {
         return PokemonType.getEffectiveness(attackType, types);

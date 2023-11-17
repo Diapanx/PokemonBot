@@ -6,6 +6,4 @@ public class NPCBattle {
     ObjectId trainer;
     ObjectId myPokemon;
     ObjectId enemyPokemon;
-
-
 }

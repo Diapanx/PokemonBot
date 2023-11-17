@@ -10,12 +10,10 @@ public enum MoveEffectiveness {
     DOUBLE_EFFECT("It's super effective!", 2),
     QUAD_EFFECT("It's super effective!", 4);
 
-
-    @Nullable
-    @Getter
-    String text;
+    @Nullable @Getter String text;
 
     double effectiveness;
+
     MoveEffectiveness(String text, double effectiveness) {
         this.text = text;
         this.effectiveness = effectiveness;
