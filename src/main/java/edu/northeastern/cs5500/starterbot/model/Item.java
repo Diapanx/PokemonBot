@@ -30,5 +30,4 @@ public class Item implements Model {
     public void setId(ObjectId id) {
         throw new UnsupportedOperationException("Unimplemented method 'setId'");
     }
-
 }

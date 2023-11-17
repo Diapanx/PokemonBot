@@ -8,5 +8,4 @@ public class HealthPotion extends Item {
         super(name, description);
         this.restoreHP = 0.25;
     }
-
 }

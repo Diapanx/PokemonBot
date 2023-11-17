@@ -8,5 +8,4 @@ public class PokeBall extends Item {
         super(name, description);
         this.captureChance = 0.25;
     }
-
 }
