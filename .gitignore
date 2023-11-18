@@ -136,3 +136,6 @@ gradle-app.setting
 bin/
 
 !honeycomb-opentelemetry-javaagent-1.4.2.jar
+
+# JDT-specific     
+*.classpath
