@@ -11,6 +11,10 @@ public class Trainer implements Model {
     // This is the "snowflake id" of the user
     // e.g. event.getUser().getId()
     String discordUserId;
+    @Nonnull List<ObjectId> pokemonInventory;
 
-    List<ObjectId> pokemonInventory;
+    @Nullable NPCBattle currentBattle;
+
+    @Nonnull @Nonnegative Integer pokeCoins = 0;
+
 }
