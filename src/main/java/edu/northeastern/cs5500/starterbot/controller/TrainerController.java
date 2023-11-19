@@ -1,10 +1,17 @@
 package edu.northeastern.cs5500.starterbot.controller;
 
 import edu.northeastern.cs5500.starterbot.exception.PokemonNotExistException;
+import edu.northeastern.cs5500.starterbot.model.Pokemon;
 import edu.northeastern.cs5500.starterbot.model.Trainer;
 import edu.northeastern.cs5500.starterbot.repository.GenericRepository;
+import java.util.Collection;
+import javax.annotation.Nonnull;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import org.bson.types.ObjectId;
+
 @Singleton
-public class TrainerController{
+public class TrainerController {
     GenericRepository<Trainer> trainerRepository;
 
     @Inject
@@ -52,7 +59,8 @@ public class TrainerController{
         trainerRepository.update(trainer);
     }
 
-    public void removePokemonFromTrainer(@Nonnull Trainer trainer, @Nonnull Pokemon pokemon) {
+    public void removePokemonFromTrainer(@Nonnull Trainer trainer, @Nonnull Pokemon pokemon)
+            throws PokemonNotExistException {
         if (!trainer.getPokemonInventory().contains(pokemon.getId())) {
             throw new PokemonNotExistException(
                     "Cannot remove a Pokemon that is not in the user's inventory");
@@ -60,6 +68,4 @@ public class TrainerController{
         trainer.getPokemonInventory().remove(pokemon.getId());
         trainerRepository.update(trainer);
     }
-
-    
 }
