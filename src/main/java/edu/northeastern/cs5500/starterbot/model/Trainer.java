@@ -1,6 +1,10 @@
 package edu.northeastern.cs5500.starterbot.model;
 
+import com.mongodb.lang.Nullable;
+import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
 import lombok.Data;
 import org.bson.types.ObjectId;
 
@@ -11,6 +15,9 @@ public class Trainer implements Model {
     // This is the "snowflake id" of the user
     // e.g. event.getUser().getId()
     String discordUserId;
+    @Nonnull List<ObjectId> pokemonInventory = new ArrayList<>();
 
-    List<ObjectId> pokemonInventory;
+    @Nullable NPCBattle currentBattle;
+
+    @Nonnull @Nonnegative Integer pokeCoins = 0;
 }
