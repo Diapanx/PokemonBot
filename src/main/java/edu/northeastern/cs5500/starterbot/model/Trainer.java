@@ -16,7 +16,7 @@ public class Trainer implements Model {
     // e.g. event.getUser().getId()
     String discordUserId;
     @Nonnull List<ObjectId> pokemonInventory = new ArrayList<>();
-
+    @Nonnull ObjectId[] team = new ObjectId[6];
     @Nullable NPCBattle currentBattle;
 
     @Nonnull @Nonnegative Integer pokeCoins = 0;
