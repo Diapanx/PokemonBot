@@ -1,5 +1,6 @@
 package edu.northeastern.cs5500.starterbot.controller;
 
+import edu.northeastern.cs5500.starterbot.exception.InvalidTeamPositionException;
 import edu.northeastern.cs5500.starterbot.exception.PokemonNotExistException;
 import edu.northeastern.cs5500.starterbot.model.Pokemon;
 import edu.northeastern.cs5500.starterbot.model.Trainer;
@@ -37,6 +38,7 @@ public class TrainerController {
         return trainerRepository.get(trainerId);
     }
 
+    // ----------------------------------pokemonRepository API----------------------------------
     public Trainer addPokemonToTrainer(String discordMemberId, String pokemonIdString) {
         ObjectId pokemonId = new ObjectId(pokemonIdString);
         Trainer trainer = getTrainerForMemberId(discordMemberId);
@@ -67,5 +69,34 @@ public class TrainerController {
         }
         trainer.getPokemonInventory().remove(pokemon.getId());
         trainerRepository.update(trainer);
+    }
+
+    // -----------------------------------------team API-----------------------------------------
+    public Trainer formTeam(String discordMemberId, String pokemonIdString, int position)
+            throws InvalidTeamPositionException {
+        ObjectId pokemonId = new ObjectId(pokemonIdString);
+        Trainer trainer = getTrainerForMemberId(discordMemberId);
+        ObjectId[] team = trainer.getTeam();
+        if (position < 1 || position > 6) {
+            throw new InvalidTeamPositionException(
+                    "Position out of range. Please specify a position between 1 and 6, inclusive.");
+        }
+        // Ensure there is no empty slot before the given position.
+        if (this.countTeamMember(team) + 1 < position) {
+            throw new InvalidTeamPositionException(
+                    "Cannot add Pokemon to a position that has an empty postion before it.");
+        }
+        team[position] = pokemonId;
+        return trainerRepository.update(trainer);
+    }
+
+    private int countTeamMember(ObjectId[] team) {
+        int count = 0;
+        for (ObjectId member : team) {
+            if (member != null) {
+                count++;
+            }
+        }
+        return count;
     }
 }
