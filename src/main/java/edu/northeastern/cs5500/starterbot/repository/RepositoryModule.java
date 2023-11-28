@@ -2,6 +2,7 @@ package edu.northeastern.cs5500.starterbot.repository;
 
 import dagger.Module;
 import dagger.Provides;
+import edu.northeastern.cs5500.starterbot.model.Trainer;
 import edu.northeastern.cs5500.starterbot.model.UserPreference;
 
 @Module
@@ -14,6 +15,16 @@ public class RepositoryModule {
         return repository;
     }
 
+    @Provides
+    public GenericRepository<Trainer> provideTrainerRepository(
+            MongoDBRepository<Trainer> repository) {
+        return repository;
+    }
+
+    @Provides
+    public Class<Trainer> provideTrainer() {
+        return Trainer.class;
+    }
     // @Provides
     // public GenericRepository<UserPreference> provideUserPreferencesRepository(
     //         MongoDBRepository<UserPreference> repository) {
