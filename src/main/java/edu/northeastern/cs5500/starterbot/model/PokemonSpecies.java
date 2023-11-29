@@ -1,7 +1,6 @@
 package edu.northeastern.cs5500.starterbot.model;
 
 import javax.annotation.Nonnull;
-
 import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
