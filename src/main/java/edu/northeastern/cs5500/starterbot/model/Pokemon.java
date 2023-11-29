@@ -1,28 +1,33 @@
 package edu.northeastern.cs5500.starterbot.model;
 
+import java.util.List;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.Singular;
 import org.bson.types.ObjectId;
 
+@Builder
 @Data
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class Pokemon implements Model {
-
-    @NonNull ObjectId id = new ObjectId();
+    @Nonnull @Builder.Default ObjectId id = new ObjectId();
 
     @Nonnull Integer pokedexNumber;
 
-    @NonNull Integer level = 5;
+    @Nonnull @Builder.Default Integer level = 5;
 
-    @NonNull @Nonnegative Integer currentHp;
+    @Nonnull @Nonnegative Integer currentHp;
+    PokemonStatus currentStatus;
 
-    @NonNull Integer hp;
-    @NonNull Integer attack;
-    @NonNull Integer defense;
-    @NonNull Integer specialAttack;
-    @NonNull Integer specialDefense;
-    @NonNull Integer speed;
+    @Nonnull Integer hp;
+    @Nonnull Integer attack;
+    @Nonnull Integer defense;
+    @Nonnull Integer specialAttack;
+    @Nonnull Integer specialDefense;
+    @Nonnull Integer speed;
+
+    @Singular @Nonnull List<PokemonMove> moves;
 }
