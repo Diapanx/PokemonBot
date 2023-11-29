@@ -44,7 +44,7 @@ public class TeamCommand implements SlashCommandHandler {
                                         new OptionData(
                                                         OptionType.INTEGER,
                                                         "position",
-                                                        "Position on the team (from 1 to 6)",
+                                                        "Position on the team (from 0 to 5)",
                                                         true)
                                                 .setRequiredRange(0, 5)));
     }

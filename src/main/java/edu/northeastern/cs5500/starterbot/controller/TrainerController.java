@@ -77,12 +77,12 @@ public class TrainerController {
         ObjectId pokemonId = new ObjectId(pokemonIdString);
         Trainer trainer = getTrainerForMemberId(discordMemberId);
         ObjectId[] team = trainer.getTeam();
-        if (position < 1 || position > 6) {
+        if (position < 0 || position > 5) {
             throw new InvalidTeamPositionException(
-                    "Position out of range. Please specify a position between 1 and 6, inclusive.");
+                    "Position out of range. Please specify a position between 0 and 5, inclusive.");
         }
         // Ensure there is no empty slot before the given position.
-        if (this.countTeamMember(team) + 1 < position) {
+        if (this.countTeamMember(team) < position) {
             throw new InvalidTeamPositionException(
                     "Cannot add Pokemon to a position that has an empty postion before it.");
         }
