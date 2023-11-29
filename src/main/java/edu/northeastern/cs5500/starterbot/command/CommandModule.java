@@ -57,4 +57,18 @@ public class CommandModule {
     public StringSelectHandler provideDropdownCommandMenuHandler(DropdownCommand dropdownCommand) {
         return dropdownCommand;
     }
+
+    @Provides
+    @IntoMap
+    @StringKey(SpawnCommand.NAME)
+    public SlashCommandHandler provideSpawnCommand(SpawnCommand command) {
+        return command;
+    }
+
+    @Provides
+    @IntoMap
+    @StringKey(SpawnCommand.NAME)
+    public ButtonHandler provideSpawnCommandClickHandler(SpawnCommand command) {
+        return command;
+    }
 }
