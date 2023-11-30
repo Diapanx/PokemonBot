@@ -2,6 +2,7 @@ package edu.northeastern.cs5500.starterbot.command;
 
 import edu.northeastern.cs5500.starterbot.controller.TrainerController;
 import edu.northeastern.cs5500.starterbot.exception.InvalidTeamPositionException;
+import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -91,11 +92,12 @@ public class TeamCommand implements SlashCommandHandler {
             throws InvalidTeamPositionException {
         String pokemon = event.getOption("pokemon").getAsString();
         Integer position = event.getOption("position").getAsInt();
-        // trainerController.formTeam(trainerDiscordId, pokemon, position);
+        trainerController.formTeam(trainerDiscordId, pokemon, position);
         event.reply(
-                        String.format(
-                                "Player <@%s> adds %s at position %s",
-                                trainerDiscordId, pokemon, String.valueOf(position)))
+                        Objects.requireNonNull(
+                                String.format(
+                                        "Player <@%s> adds %s at position %s",
+                                        trainerDiscordId, pokemon, String.valueOf(position))))
                 .queue();
     }
 }
