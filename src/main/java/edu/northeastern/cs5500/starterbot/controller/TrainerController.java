@@ -6,6 +6,7 @@ import edu.northeastern.cs5500.starterbot.model.Pokemon;
 import edu.northeastern.cs5500.starterbot.model.Trainer;
 import edu.northeastern.cs5500.starterbot.repository.GenericRepository;
 import java.util.Collection;
+import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -31,14 +32,14 @@ public class TrainerController {
 
         Trainer trainer = new Trainer();
         trainer.setDiscordUserId(discordMemberId);
-        return trainerRepository.add(trainer);
+        return Objects.requireNonNull(trainerRepository.add(trainer));
     }
 
     public Trainer getTrainerForId(ObjectId trainerId) {
-        return trainerRepository.get(trainerId);
+        return trainerRepository.get(Objects.requireNonNull(trainerId));
     }
 
-    // ----------------------------------pokemonRepository API----------------------------------
+    // ----------------------------------pokemonRepository----------------------------------
     public Trainer addPokemonToTrainer(String discordMemberId, String pokemonIdString) {
         ObjectId pokemonId = new ObjectId(pokemonIdString);
         Trainer trainer = getTrainerForMemberId(discordMemberId);
@@ -46,19 +47,10 @@ public class TrainerController {
         return trainerRepository.update(trainer);
     }
 
-    public Trainer addPokemonToTrainer(ObjectId id, String pokemonIdString) {
-        ObjectId pokemonId = new ObjectId(pokemonIdString);
-        Trainer trainer = getTrainerForId(id);
+    public Trainer addPokemonToTrainer(String discordMemberId, ObjectId pokemonId) {
+        Trainer trainer = getTrainerForMemberId(discordMemberId);
         trainer.getPokemonInventory().add(pokemonId);
         return trainerRepository.update(trainer);
-    }
-
-    public void removePokemonFromTrainer(
-            @Nonnull String discordMemberId, @Nonnull String pokemonIdString) {
-        ObjectId pokemonId = new ObjectId(pokemonIdString);
-        Trainer trainer = getTrainerForMemberId(discordMemberId);
-        trainer.getPokemonInventory().remove(pokemonId);
-        trainerRepository.update(trainer);
     }
 
     public void removePokemonFromTrainer(@Nonnull Trainer trainer, @Nonnull Pokemon pokemon)
@@ -71,16 +63,15 @@ public class TrainerController {
         trainerRepository.update(trainer);
     }
 
-    // -----------------------------------------team API-----------------------------------------
-    public Trainer formTeam(String discordMemberId, String pokemonIdString, int position)
+    // -----------------------------------------team-----------------------------------------
+    public Trainer formTeam(String discordMemberId, String pokemonName, int position)
             throws InvalidTeamPositionException {
-        ObjectId pokemonId = new ObjectId(pokemonIdString);
+        // get pokedex number by name
+        // get object id by pokedex number
+        ObjectId pokemonId = new ObjectId(pokemonName);
         Trainer trainer = getTrainerForMemberId(discordMemberId);
         ObjectId[] team = trainer.getTeam();
-        if (position < 0 || position > 5) {
-            throw new InvalidTeamPositionException(
-                    "Position out of range. Please specify a position between 0 and 5, inclusive.");
-        }
+
         // Ensure there is no empty slot before the given position.
         if (this.countTeamMember(team) < position) {
             throw new InvalidTeamPositionException(
