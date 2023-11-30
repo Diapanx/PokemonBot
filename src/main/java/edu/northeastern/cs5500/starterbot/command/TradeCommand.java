@@ -48,8 +48,8 @@ public class TradeCommand implements SlashCommandHandler {
     public CommandData getCommandData() {
         return Commands.slash(getName(), "perform trading actions between users")
                 .addSubcommands(
-                        new SubcommandData("new", "Create a new trade"),
-                        new SubcommandData("offer", "View all offers to user's trade"));
+                        new SubcommandData("new", "Create a new trade"));
+                        // new SubcommandData("offer", "View all offers to user's trade"));
     }
 
     @Override
@@ -79,7 +79,7 @@ public class TradeCommand implements SlashCommandHandler {
                 //
                 break;
             default:
-                event.reply("Unknown error occured.").setEphemeral(true).queue();
+                event.reply("Invalid subcommand").setEphemeral(true).queue();
         }
     }
 
