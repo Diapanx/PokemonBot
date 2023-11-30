@@ -1,13 +1,12 @@
 package edu.northeastern.cs5500.starterbot.controller;
 
+import edu.northeastern.cs5500.starterbot.exception.PokemonNotExistException;
 import edu.northeastern.cs5500.starterbot.model.Pokemon;
 import edu.northeastern.cs5500.starterbot.model.TradeOffer;
 import edu.northeastern.cs5500.starterbot.model.Trainer;
-import edu.northeastern.cs5500.starterbot.exception.PokemonNotExistException;
 import edu.northeastern.cs5500.starterbot.repository.GenericRepository;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -24,7 +23,8 @@ public class TradeOfferController {
         this.trainerController = trainerController;
     }
 
-    public TradeOffer createNewOffering(Trainer trainer, Pokemon pokemon) throws PokemonNotExistException{
+    public TradeOffer createNewOffering(Trainer trainer, Pokemon pokemon)
+            throws PokemonNotExistException {
         try {
             trainerController.removePokemonFromTrainer(trainer, pokemon);
             TradeOffer tradeOffer = new TradeOffer(trainer.getId(), pokemon.getId());
@@ -34,7 +34,8 @@ public class TradeOfferController {
         }
     }
 
-    public TradeOffer respondToOffering(TradeOffer tradeOffer, Trainer trainer, Pokemon pokemon) throws PokemonNotExistException{
+    public TradeOffer respondToOffering(TradeOffer tradeOffer, Trainer trainer, Pokemon pokemon)
+            throws PokemonNotExistException {
         try {
             trainerController.removePokemonFromTrainer(trainer, pokemon);
             TradeOffer responseOffering = new TradeOffer(trainer.getId(), pokemon.getId());
@@ -68,5 +69,4 @@ public class TradeOfferController {
             throw new IllegalStateException(e);
         }
     }
-
 }

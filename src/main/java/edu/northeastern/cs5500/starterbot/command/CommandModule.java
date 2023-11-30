@@ -78,6 +78,4 @@ public class CommandModule {
     public SlashCommandHandler provideTradeCommand(TradeCommand tradeCommand) {
         return tradeCommand;
     }
-
-
 }
