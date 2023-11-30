@@ -15,10 +15,13 @@ import org.bson.types.ObjectId;
 @Singleton
 public class TrainerController {
     GenericRepository<Trainer> trainerRepository;
+    PokemonController pokemonController;
 
     @Inject
-    TrainerController(GenericRepository<Trainer> trainerRepository) {
+    TrainerController(
+            GenericRepository<Trainer> trainerRepository, PokemonController pokemonController) {
         this.trainerRepository = trainerRepository;
+        this.pokemonController = pokemonController;
     }
 
     @Nonnull
@@ -66,28 +69,21 @@ public class TrainerController {
     // -----------------------------------------team-----------------------------------------
     public Trainer formTeam(String discordMemberId, String pokemonName, int position)
             throws InvalidTeamPositionException {
-        // get pokedex number by name
-        // get object id by pokedex number
-        ObjectId pokemonId = new ObjectId(pokemonName);
+        ObjectId pokemonId = this.pokemonController.getPokemonByName(pokemonName).getId();
         Trainer trainer = getTrainerForMemberId(discordMemberId);
-        ObjectId[] team = trainer.getTeam();
-
+        position--;
         // Ensure there is no empty slot before the given position.
-        if (this.countTeamMember(team) < position) {
+        if (trainer.getTeam().size() < position) {
             throw new InvalidTeamPositionException(
                     "Cannot add Pokemon to a position that has an empty postion before it.");
+            // Add the given Pokemon directly to the team.
+        } else if (trainer.getTeam().size() == position) {
+            trainer.getTeam().add(pokemonId);
+            // Replace the current Pokemon in the specific position with the given Pokemon.
+        } else {
+            trainer.getTeam().remove(position);
+            trainer.getTeam().add(position, pokemonId);
         }
-        team[position] = pokemonId;
         return trainerRepository.update(trainer);
-    }
-
-    private int countTeamMember(ObjectId[] team) {
-        int count = 0;
-        for (ObjectId member : team) {
-            if (member != null) {
-                count++;
-            }
-        }
-        return count;
     }
 }
