@@ -1,7 +1,12 @@
 package edu.northeastern.cs5500.starterbot.command;
 
+import edu.northeastern.cs5500.starterbot.controller.PokedexController;
+import edu.northeastern.cs5500.starterbot.controller.PokemonController;
 import edu.northeastern.cs5500.starterbot.controller.TrainerController;
 import edu.northeastern.cs5500.starterbot.exception.InvalidTeamPositionException;
+import edu.northeastern.cs5500.starterbot.model.Pokemon;
+import edu.northeastern.cs5500.starterbot.model.PokemonSpecies;
+import edu.northeastern.cs5500.starterbot.model.Trainer;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
@@ -14,11 +19,16 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
+import org.bson.types.ObjectId;
 
 @Slf4j
 public class TeamCommand implements SlashCommandHandler {
 
     static final String NAME = "team";
+    @Inject PokemonController pokemonController;
+
+    @Inject PokedexController pokedexController;
+
     @Inject TrainerController trainerController;
 
     @Inject
@@ -45,9 +55,9 @@ public class TeamCommand implements SlashCommandHandler {
                                         new OptionData(
                                                         OptionType.INTEGER,
                                                         "position",
-                                                        "Position on the team (from 0 to 5)",
+                                                        "Position on the team (from 1 to 6)",
                                                         true)
-                                                .setRequiredRange(0, 5)));
+                                                .setRequiredRange(1, 6)));
     }
 
     @Override
@@ -72,17 +82,17 @@ public class TeamCommand implements SlashCommandHandler {
         String username = event.getMember().getUser().getName();
         eb.setTitle(String.format("%s's Battle Team", username));
 
-        // Trainer trainer = trainerController.getTrainerForMemberId(trainerDiscordId);
-        // ObjectId[] team = trainer.getTeam();
-        // int index = 0;
-        // while (index <= 5 || team[index] != null){
-        //     eb.addField(String.format("[%d]", index), "objectId to name", false);
-        // }
-
-        eb.addField("[1]", "Bulbassaur", false);
-        eb.addField("[2]", "Quaxly", false);
-        eb.addField("[3]", "Pikachu", false);
-        eb.addField("[4]", "Pika", false);
+        Trainer trainer = trainerController.getTrainerForMemberId(trainerDiscordId);
+        int index = 0;
+        eb.setThumbnail(event.getMember().getAvatarUrl());
+        for (ObjectId pokemonId : trainer.getTeam()) {
+            Pokemon pokemon = pokemonController.getPokemonById(pokemonId);
+            PokemonSpecies species =
+                    pokedexController.getPokemonSpeciesByNumber(pokemon.getPokedexNumber());
+            index++;
+            eb.addField(
+                    String.format("[%d]", index), String.format("%s", species.getName()), false);
+        }
         MessageCreateBuilder mcb = new MessageCreateBuilder();
         mcb = mcb.addEmbeds(eb.build());
         event.reply(mcb.build()).queue();
@@ -96,8 +106,8 @@ public class TeamCommand implements SlashCommandHandler {
         event.reply(
                         Objects.requireNonNull(
                                 String.format(
-                                        "Player <@%s> adds %s at position %s",
-                                        trainerDiscordId, pokemon, String.valueOf(position))))
+                                        "Player <@%s> adds %s at position %d",
+                                        trainerDiscordId, pokemon, position)))
                 .queue();
     }
 }
