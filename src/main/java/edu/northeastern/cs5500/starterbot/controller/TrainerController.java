@@ -66,7 +66,6 @@ public class TrainerController {
         trainer.getPokemonInventory().remove(pokemon.getId());
         trainerRepository.update(trainer);
     }
-
     // -----------------------------------------team-----------------------------------------
     public Trainer formTeam(String discordMemberId, String pokemonName, int position)
             throws InvalidTeamPositionException, PokemonNotExistException {
@@ -100,7 +99,8 @@ public class TrainerController {
         throw new PokemonNotExistException("Pokemon is not in inventory.");
     }
 
-    public Boolean pokemonIsInInventory(@Nonnull String discordMemberId, @Nonnull String pokemonIdString){
+    public Boolean pokemonIsInInventory(
+            @Nonnull String discordMemberId, @Nonnull String pokemonIdString) {
         Trainer trainer = getTrainerForMemberId(discordMemberId);
         return trainer.getPokemonInventory().contains(new ObjectId(pokemonIdString));
     }
