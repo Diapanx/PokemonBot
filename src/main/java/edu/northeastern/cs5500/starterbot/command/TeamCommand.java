@@ -4,6 +4,7 @@ import edu.northeastern.cs5500.starterbot.controller.PokedexController;
 import edu.northeastern.cs5500.starterbot.controller.PokemonController;
 import edu.northeastern.cs5500.starterbot.controller.TrainerController;
 import edu.northeastern.cs5500.starterbot.exception.InvalidTeamPositionException;
+import edu.northeastern.cs5500.starterbot.exception.PokemonNotExistException;
 import edu.northeastern.cs5500.starterbot.model.Pokemon;
 import edu.northeastern.cs5500.starterbot.model.PokemonSpecies;
 import edu.northeastern.cs5500.starterbot.model.Trainer;
@@ -62,7 +63,7 @@ public class TeamCommand implements SlashCommandHandler {
 
     @Override
     public void onSlashCommandInteraction(@Nonnull SlashCommandInteractionEvent event)
-            throws InvalidTeamPositionException {
+            throws InvalidTeamPositionException, PokemonNotExistException {
         log.info("event: /team");
         String trainerDiscordId = event.getMember().getId();
         switch (event.getSubcommandName()) {
@@ -99,7 +100,7 @@ public class TeamCommand implements SlashCommandHandler {
     }
 
     public void add(@Nonnull SlashCommandInteractionEvent event, String trainerDiscordId)
-            throws InvalidTeamPositionException {
+            throws InvalidTeamPositionException, PokemonNotExistException {
         String pokemon = event.getOption("pokemon").getAsString();
         Integer position = event.getOption("position").getAsInt();
         trainerController.formTeam(trainerDiscordId, pokemon, position);
