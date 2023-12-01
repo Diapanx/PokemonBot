@@ -6,6 +6,7 @@ import edu.northeastern.cs5500.starterbot.model.Pokemon;
 import edu.northeastern.cs5500.starterbot.model.Trainer;
 import edu.northeastern.cs5500.starterbot.repository.GenericRepository;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
@@ -68,9 +69,9 @@ public class TrainerController {
 
     // -----------------------------------------team-----------------------------------------
     public Trainer formTeam(String discordMemberId, String pokemonName, int position)
-            throws InvalidTeamPositionException {
-        ObjectId pokemonId = this.pokemonController.getPokemonByName(pokemonName).getId();
+            throws InvalidTeamPositionException, PokemonNotExistException {
         Trainer trainer = getTrainerForMemberId(discordMemberId);
+        ObjectId pokemonId = getPokemonByName(trainer.getPokemonInventory(), pokemonName).getId();
         position--;
         // Ensure there is no empty slot before the given position.
         if (trainer.getTeam().size() < position) {
@@ -85,5 +86,17 @@ public class TrainerController {
             trainer.getTeam().add(position, pokemonId);
         }
         return trainerRepository.update(trainer);
+    }
+
+    public Pokemon getPokemonByName(List<ObjectId> pokemonInventory, String pokemonName)
+            throws PokemonNotExistException {
+        int pokedexNumber = pokemonController.getPokedexByName(pokemonName);
+        for (ObjectId pokemonId : pokemonInventory) {
+            Pokemon pokemon = pokemonController.getPokemonById(pokemonId);
+            if (pokemon.getPokedexNumber() == pokedexNumber) {
+                return pokemon;
+            }
+        }
+        throw new PokemonNotExistException("Pokemon is not in inventory.");
     }
 }

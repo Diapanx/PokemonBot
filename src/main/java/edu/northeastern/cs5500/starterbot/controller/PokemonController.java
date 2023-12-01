@@ -4,7 +4,6 @@ import edu.northeastern.cs5500.starterbot.model.Pokemon;
 import edu.northeastern.cs5500.starterbot.model.Pokemon.PokemonBuilder;
 import edu.northeastern.cs5500.starterbot.model.PokemonMove;
 import edu.northeastern.cs5500.starterbot.repository.GenericRepository;
-import java.util.Collection;
 import java.util.Objects;
 import java.util.Random;
 import javax.annotation.Nonnull;
@@ -103,18 +102,7 @@ public class PokemonController {
         return pokemonRepository.get(Objects.requireNonNull(pokemonId));
     }
 
-    public Pokemon getPokemonByPokedex(int pokedexNumber) {
-        Collection<Pokemon> pokemons = pokemonRepository.getAll();
-        for (Pokemon currentPokemon : pokemons) {
-            if (currentPokemon.getPokedexNumber().equals(pokedexNumber)) {
-                return currentPokemon;
-            }
-        }
-        return null;
-    }
-
-    public Pokemon getPokemonByName(String pokemonName) {
-        int pokedexNumber = pokedexController.getSpeciesByName(pokemonName).getPokedexNumber();
-        return getPokemonByPokedex(pokedexNumber);
+    public int getPokedexByName(String pokemonName) {
+        return pokedexController.getSpeciesByName(pokemonName).getPokedexNumber();
     }
 }
