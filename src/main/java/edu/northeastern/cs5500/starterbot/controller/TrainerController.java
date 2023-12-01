@@ -68,4 +68,10 @@ public class TrainerController {
         trainer.getPokemonInventory().remove(pokemon.getId());
         trainerRepository.update(trainer);
     }
+
+    public Boolean pokemonIsInInventory(
+            @Nonnull String discordMemberId, @Nonnull ObjectId pokemonId) {
+        Trainer trainer = getTrainerForMemberId(discordMemberId);
+        return trainer.getPokemonInventory().contains(pokemonId);
+    }
 }
