@@ -70,8 +70,8 @@ public class TrainerController {
     }
 
     public Boolean pokemonIsInInventory(
-            @Nonnull String discordMemberId, @Nonnull String pokemonIdString) {
+            @Nonnull String discordMemberId, @Nonnull ObjectId pokemonId) {
         Trainer trainer = getTrainerForMemberId(discordMemberId);
-        return trainer.getPokemonInventory().contains(new ObjectId(pokemonIdString));
+        return trainer.getPokemonInventory().contains(pokemonId);
     }
 }
