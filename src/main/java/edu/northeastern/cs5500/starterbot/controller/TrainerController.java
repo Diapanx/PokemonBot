@@ -99,4 +99,9 @@ public class TrainerController {
         }
         throw new PokemonNotExistException("Pokemon is not in inventory.");
     }
+
+    public Boolean pokemonIsInInventory(@Nonnull String discordMemberId, @Nonnull String pokemonIdString){
+        Trainer trainer = getTrainerForMemberId(discordMemberId);
+        return trainer.getPokemonInventory().contains(new ObjectId(pokemonIdString));
+    }
 }
