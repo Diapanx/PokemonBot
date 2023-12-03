@@ -66,28 +66,8 @@ public class TrainerController {
         trainer.getPokemonInventory().remove(pokemon.getId());
         trainerRepository.update(trainer);
     }
-    // -----------------------------------------team-----------------------------------------
-    public Trainer formTeam(String discordMemberId, String pokemonName, int position)
-            throws InvalidTeamPositionException, PokemonNotExistException {
-        Trainer trainer = getTrainerForMemberId(discordMemberId);
-        ObjectId pokemonId = getPokemonByName(trainer.getPokemonInventory(), pokemonName).getId();
-        position--;
-        // Ensure there is no empty slot before the given position.
-        if (trainer.getTeam().size() < position) {
-            throw new InvalidTeamPositionException(
-                    "Cannot add Pokemon to a position that has an empty postion before it.");
-            // Add the given Pokemon directly to the team.
-        } else if (trainer.getTeam().size() == position) {
-            trainer.getTeam().add(pokemonId);
-            // Replace the current Pokemon in the specific position with the given Pokemon.
-        } else {
-            trainer.getTeam().remove(position);
-            trainer.getTeam().add(position, pokemonId);
-        }
-        return trainerRepository.update(trainer);
-    }
-
-    public Pokemon getPokemonByName(List<ObjectId> pokemonInventory, String pokemonName)
+    
+    public Pokemon getInventoryPokemonByName(List<ObjectId> pokemonInventory, String pokemonName)
             throws PokemonNotExistException {
         int pokedexNumber = pokemonController.getPokedexByName(pokemonName);
         for (ObjectId pokemonId : pokemonInventory) {
@@ -103,5 +83,32 @@ public class TrainerController {
             @Nonnull String discordMemberId, @Nonnull ObjectId pokemonId) {
         Trainer trainer = getTrainerForMemberId(discordMemberId);
         return trainer.getPokemonInventory().contains(pokemonId);
+    }
+
+    // -----------------------------------------team-----------------------------------------
+    public void formTeam(String discordMemberId, String pokemonName, int position)
+            throws InvalidTeamPositionException, PokemonNotExistException {
+        Trainer trainer = getTrainerForMemberId(discordMemberId);
+        Pokemon pokemon = getInventoryPokemonByName(trainer.getPokemonInventory(), pokemonName);
+        ObjectId pokemonId = pokemon.getId();
+        position--;
+        // Ensure there is no empty slot before the given position.
+        if (trainer.getTeam().size() < position) {
+            throw new InvalidTeamPositionException(
+                    "Cannot add Pokemon to a position that has an empty postion before it.");
+            // Add the given Pokemon directly to the team.
+        } else if (trainer.getTeam().size() == position) {
+            trainer.getTeam().add(pokemonId);
+            // Replace the current Pokemon in the specific position with the given Pokemon.
+            // Add the replaced Pokemon to trainer's inventory
+        } else {
+            ObjectId replacedPokemonId = trainer.getTeam().remove(position);
+            trainer.getTeam().add(position, pokemonId);
+            trainerRepository.update(trainer);
+            addPokemonToTrainer(discordMemberId, replacedPokemonId);
+            trainer = getTrainerForMemberId(discordMemberId);
+        }
+        // Remove Pokemon from trainer's inventory
+        removePokemonFromTrainer(trainer, pokemon);
     }
 }
