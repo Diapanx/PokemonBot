@@ -66,7 +66,7 @@ public class TrainerController {
         trainer.getPokemonInventory().remove(pokemon.getId());
         trainerRepository.update(trainer);
     }
-    
+
     public Pokemon getInventoryPokemonByName(List<ObjectId> pokemonInventory, String pokemonName)
             throws PokemonNotExistException {
         int pokedexNumber = pokemonController.getPokedexByName(pokemonName);
