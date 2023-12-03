@@ -7,8 +7,12 @@ import edu.northeastern.cs5500.starterbot.model.Trainer;
 import edu.northeastern.cs5500.starterbot.repository.GenericRepository;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import org.bson.types.ObjectId;
 
 @Singleton
 public class TradeOfferController {
@@ -28,7 +32,7 @@ public class TradeOfferController {
         try {
             trainerController.removePokemonFromTrainer(trainer, pokemon);
             TradeOffer tradeOffer = new TradeOffer(trainer.getId(), pokemon.getId());
-            return tradeOfferRepository.add(tradeOffer);
+            return tradeOfferRepository.add(Objects.requireNonNull(tradeOffer));
         } catch (PokemonNotExistException e) {
             return null;
         }
@@ -40,7 +44,7 @@ public class TradeOfferController {
             trainerController.removePokemonFromTrainer(trainer, pokemon);
             TradeOffer responseOffering = new TradeOffer(trainer.getId(), pokemon.getId());
             responseOffering.setParent(tradeOffer.getId());
-            return tradeOfferRepository.add(tradeOffer);
+            return tradeOfferRepository.add(Objects.requireNonNull(tradeOffer));
         } catch (PokemonNotExistException e) {
             return null;
         }
@@ -69,4 +73,40 @@ public class TradeOfferController {
             throw new IllegalStateException(e);
         }
     }
+
+    public TradeOffer getTradeById(ObjectId tradeOfferId) {
+        return tradeOfferRepository.get(tradeOfferId);
+    }
+
+    public List<TradeOffer> getAllOpenTrades() {
+        List<TradeOffer> openTrades = new ArrayList<>();
+        for (TradeOffer trade : tradeOfferRepository.getAll()) {
+            if (trade.getParent() == null) {
+                openTrades.add(trade);
+            }
+        }
+        return openTrades;
+    }
+
+    public List<TradeOffer> getOpenTradesByTrainer(Trainer trainer) {
+        List<TradeOffer> trainerOpenTrades = new ArrayList<>();
+        for (TradeOffer trade : getAllOpenTrades()) {
+            if (trade.getTrainerId().equals(trainer.getId())) {
+                trainerOpenTrades.add(trade);
+            }
+        }
+        return trainerOpenTrades;
+    }
+
+    // public List<TradeOffer> getOffersForTrainer(Trainer trainer) {
+    // List<TradeOffer> offers = new ArrayList<>();
+    // for (TradeOffer tradeOffer : findAllOpenTradeforUser()) {
+    // if
+    // (getTradeById(tradeOffer.getParent()).getTrainerId().equals(trainer.getId()))
+    // {
+    // offers.add(tradeOffer);
+    // }
+    // }
+    // return offers;
+    // }
 }

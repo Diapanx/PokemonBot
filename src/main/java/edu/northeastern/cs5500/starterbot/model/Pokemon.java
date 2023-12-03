@@ -30,4 +30,8 @@ public class Pokemon implements Model {
     @Nonnull Integer speed;
 
     @Singular @Nonnull List<PokemonMove> moves;
+
+    public Pokemon() {
+        // public constructor for MongoDB
+    }
 }
