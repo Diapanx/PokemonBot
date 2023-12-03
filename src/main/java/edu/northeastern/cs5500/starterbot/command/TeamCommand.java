@@ -103,7 +103,15 @@ public class TeamCommand implements SlashCommandHandler {
             throws InvalidTeamPositionException, PokemonNotExistException {
         String pokemon = event.getOption("pokemon").getAsString();
         Integer position = event.getOption("position").getAsInt();
-        trainerController.formTeam(trainerDiscordId, pokemon, position);
+
+        try {
+            trainerController.formTeam(trainerDiscordId, pokemon, position);
+        } catch (InvalidTeamPositionException e) {
+            event.reply("Cannot add Pokemon to a position that has an empty postion before it.")
+                    .queue();
+        } catch (PokemonNotExistException e) {
+            event.reply("Pokemon does not exist.").queue();
+        }
         event.reply(
                         Objects.requireNonNull(
                                 String.format(
