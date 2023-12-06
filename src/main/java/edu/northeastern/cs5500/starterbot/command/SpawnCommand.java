@@ -23,14 +23,11 @@ public class SpawnCommand implements SlashCommandHandler, ButtonHandler {
 
     static final String NAME = "spawn";
 
-    @Inject
-    PokemonController pokemonController;
+    @Inject PokemonController pokemonController;
 
-    @Inject
-    PokedexController pokedexController;
+    @Inject PokedexController pokedexController;
 
-    @Inject
-    TrainerController trainerController;
+    @Inject TrainerController trainerController;
 
     @Inject
     public SpawnCommand() {
@@ -54,7 +51,8 @@ public class SpawnCommand implements SlashCommandHandler, ButtonHandler {
         log.info("event: /spawn");
 
         Pokemon pokemon = pokemonController.spawnRandomPokemon();
-        PokemonSpecies species = pokedexController.getPokemonSpeciesByNumber(pokemon.getPokedexNumber());
+        PokemonSpecies species =
+                pokedexController.getPokemonSpeciesByNumber(pokemon.getPokedexNumber());
 
         EmbedBuilder embedBuilder = new EmbedBuilder();
         embedBuilder.setTitle(String.format("A wild %s appears!", species.getName()));
@@ -62,9 +60,10 @@ public class SpawnCommand implements SlashCommandHandler, ButtonHandler {
         embedBuilder.setThumbnail(species.getImageUrl());
 
         MessageCreateBuilder messageCreateBuilder = new MessageCreateBuilder();
-        messageCreateBuilder = messageCreateBuilder.addActionRow(
-                Button.primary(
-                        getName() + ":catch:" + pokemon.getId().toString(), "Catch"));
+        messageCreateBuilder =
+                messageCreateBuilder.addActionRow(
+                        Button.primary(
+                                getName() + ":catch:" + pokemon.getId().toString(), "Catch"));
         messageCreateBuilder = messageCreateBuilder.addEmbeds(embedBuilder.build());
 
         event.reply(messageCreateBuilder.build()).queue();
@@ -78,10 +77,12 @@ public class SpawnCommand implements SlashCommandHandler, ButtonHandler {
 
         trainerController.addPokemonToTrainer(trainerDiscordId, pokemonId);
         Pokemon pokemon = pokemonController.getPokemonById(pokemonId);
-        PokemonSpecies species = pokedexController.getPokemonSpeciesByNumber(pokemon.getPokedexNumber());
+        PokemonSpecies species =
+                pokedexController.getPokemonSpeciesByNumber(pokemon.getPokedexNumber());
 
-        String message = String.format(
-                "Player <@%s> caught a wild %s!", trainerDiscordId, species.getName());
+        String message =
+                String.format(
+                        "Player <@%s> caught a wild %s!", trainerDiscordId, species.getName());
 
         event.deferEdit().queue();
         event.getHook()

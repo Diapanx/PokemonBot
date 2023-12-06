@@ -5,8 +5,6 @@ import edu.northeastern.cs5500.starterbot.model.Pokemon;
 import edu.northeastern.cs5500.starterbot.model.TradeOffer;
 import edu.northeastern.cs5500.starterbot.model.Trainer;
 import edu.northeastern.cs5500.starterbot.repository.GenericRepository;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -74,16 +72,6 @@ public class TradeOfferController {
         trainerController.addPokemonToTrainer(
                 trainer.getDiscordUserId(), tradeOffer.getPokemonId().toString());
         tradeOfferRepository.delete(tradeOffer.getId());
-
-    }
-
-    public int getResources() {
-        InputStream stream = this.getClass().getResourceAsStream("/pokemon.json");
-        try {
-            return stream.readAllBytes().length;
-        } catch (IOException e) {
-            throw new IllegalStateException(e);
-        }
     }
 
     public TradeOffer getTradeById(@Nonnull ObjectId tradeOfferId) {
