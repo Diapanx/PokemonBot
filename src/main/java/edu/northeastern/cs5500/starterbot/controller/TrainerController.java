@@ -6,7 +6,6 @@ import edu.northeastern.cs5500.starterbot.model.Pokemon;
 import edu.northeastern.cs5500.starterbot.model.Trainer;
 import edu.northeastern.cs5500.starterbot.repository.GenericRepository;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
@@ -67,10 +66,10 @@ public class TrainerController {
         trainerRepository.update(trainer);
     }
 
-    public Pokemon getInventoryPokemonByName(List<ObjectId> pokemonInventory, String pokemonName)
+    public Pokemon getInventoryPokemonByName(Trainer trainer, String pokemonName)
             throws PokemonNotExistException {
         int pokedexNumber = pokemonController.getPokedexByName(pokemonName);
-        for (ObjectId pokemonId : pokemonInventory) {
+        for (ObjectId pokemonId : trainer.getPokemonInventory()) {
             Pokemon pokemon = pokemonController.getPokemonById(pokemonId);
             if (pokemon.getPokedexNumber() == pokedexNumber) {
                 return pokemon;
@@ -89,7 +88,7 @@ public class TrainerController {
     public void formTeam(String discordMemberId, String pokemonName, int position)
             throws InvalidTeamPositionException, PokemonNotExistException {
         Trainer trainer = getTrainerForMemberId(discordMemberId);
-        Pokemon pokemon = getInventoryPokemonByName(trainer.getPokemonInventory(), pokemonName);
+        Pokemon pokemon = getInventoryPokemonByName(trainer, pokemonName);
         ObjectId pokemonId = pokemon.getId();
         position--;
         // Ensure there is no empty slot before the given position.

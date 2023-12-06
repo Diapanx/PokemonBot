@@ -70,10 +70,7 @@ class TrainerControllerTest {
 
         Trainer trainer = trainerController.getTrainerForMemberId(DISCORD_USER_ID_1);
         Pokemon pokemon = pokemonController.getPokemonById(trainer.getPokemonInventory().get(0));
-        assertEquals(
-                pokemon,
-                trainerController.getInventoryPokemonByName(
-                        trainer.getPokemonInventory(), "Bulbasaur"));
+        assertEquals(pokemon, trainerController.getInventoryPokemonByName(trainer, "Bulbasaur"));
     }
 
     @Test
