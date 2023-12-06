@@ -1,10 +1,12 @@
 package edu.northeastern.cs5500.starterbot.controller;
 
+import edu.northeastern.cs5500.starterbot.exception.InvalidTeamPositionException;
 import edu.northeastern.cs5500.starterbot.exception.PokemonNotExistException;
 import edu.northeastern.cs5500.starterbot.model.Pokemon;
 import edu.northeastern.cs5500.starterbot.model.Trainer;
 import edu.northeastern.cs5500.starterbot.repository.GenericRepository;
 import java.util.Collection;
+import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -13,10 +15,13 @@ import org.bson.types.ObjectId;
 @Singleton
 public class TrainerController {
     GenericRepository<Trainer> trainerRepository;
+    PokemonController pokemonController;
 
     @Inject
-    TrainerController(GenericRepository<Trainer> trainerRepository) {
+    TrainerController(
+            GenericRepository<Trainer> trainerRepository, PokemonController pokemonController) {
         this.trainerRepository = trainerRepository;
+        this.pokemonController = pokemonController;
     }
 
     @Nonnull
@@ -30,13 +35,14 @@ public class TrainerController {
 
         Trainer trainer = new Trainer();
         trainer.setDiscordUserId(discordMemberId);
-        return trainerRepository.add(trainer);
+        return Objects.requireNonNull(trainerRepository.add(trainer));
     }
 
     public Trainer getTrainerForId(ObjectId trainerId) {
-        return trainerRepository.get(trainerId);
+        return trainerRepository.get(Objects.requireNonNull(trainerId));
     }
 
+    // ----------------------------------pokemonRepository----------------------------------
     public Trainer addPokemonToTrainer(String discordMemberId, String pokemonIdString) {
         ObjectId pokemonId = new ObjectId(pokemonIdString);
         Trainer trainer = getTrainerForMemberId(discordMemberId);
@@ -44,19 +50,10 @@ public class TrainerController {
         return trainerRepository.update(trainer);
     }
 
-    public Trainer addPokemonToTrainer(ObjectId id, String pokemonIdString) {
-        ObjectId pokemonId = new ObjectId(pokemonIdString);
-        Trainer trainer = getTrainerForId(id);
+    public Trainer addPokemonToTrainer(String discordMemberId, ObjectId pokemonId) {
+        Trainer trainer = getTrainerForMemberId(discordMemberId);
         trainer.getPokemonInventory().add(pokemonId);
         return trainerRepository.update(trainer);
-    }
-
-    public void removePokemonFromTrainer(
-            @Nonnull String discordMemberId, @Nonnull String pokemonIdString) {
-        ObjectId pokemonId = new ObjectId(pokemonIdString);
-        Trainer trainer = getTrainerForMemberId(discordMemberId);
-        trainer.getPokemonInventory().remove(pokemonId);
-        trainerRepository.update(trainer);
     }
 
     public void removePokemonFromTrainer(@Nonnull Trainer trainer, @Nonnull Pokemon pokemon)
@@ -69,9 +66,48 @@ public class TrainerController {
         trainerRepository.update(trainer);
     }
 
+    public Pokemon getInventoryPokemonByName(Trainer trainer, String pokemonName)
+            throws PokemonNotExistException {
+        int pokedexNumber = pokemonController.getPokedexByName(pokemonName);
+        for (ObjectId pokemonId : trainer.getPokemonInventory()) {
+            Pokemon pokemon = pokemonController.getPokemonById(pokemonId);
+            if (pokemon.getPokedexNumber() == pokedexNumber) {
+                return pokemon;
+            }
+        }
+        throw new PokemonNotExistException("Pokemon is not in inventory.");
+    }
+
     public Boolean pokemonIsInInventory(
             @Nonnull String discordMemberId, @Nonnull ObjectId pokemonId) {
         Trainer trainer = getTrainerForMemberId(discordMemberId);
         return trainer.getPokemonInventory().contains(pokemonId);
+    }
+
+    // -----------------------------------------team-----------------------------------------
+    public void formTeam(String discordMemberId, String pokemonName, int position)
+            throws InvalidTeamPositionException, PokemonNotExistException {
+        Trainer trainer = getTrainerForMemberId(discordMemberId);
+        Pokemon pokemon = getInventoryPokemonByName(trainer, pokemonName);
+        ObjectId pokemonId = pokemon.getId();
+        position--;
+        // Ensure there is no empty slot before the given position.
+        if (trainer.getTeam().size() < position) {
+            throw new InvalidTeamPositionException(
+                    "Cannot add Pokemon to a position that has an empty postion before it.");
+            // Add the given Pokemon directly to the team.
+        } else if (trainer.getTeam().size() == position) {
+            trainer.getTeam().add(pokemonId);
+            // Replace the current Pokemon in the specific position with the given Pokemon.
+            // Add the replaced Pokemon to trainer's inventory
+        } else {
+            ObjectId replacedPokemonId = trainer.getTeam().remove(position);
+            trainer.getTeam().add(position, pokemonId);
+            trainerRepository.update(trainer);
+            addPokemonToTrainer(discordMemberId, replacedPokemonId);
+            trainer = getTrainerForMemberId(discordMemberId);
+        }
+        // Remove Pokemon from trainer's inventory
+        removePokemonFromTrainer(trainer, pokemon);
     }
 }

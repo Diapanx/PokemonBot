@@ -5,6 +5,7 @@ import edu.northeastern.cs5500.starterbot.model.Pokemon.PokemonBuilder;
 import edu.northeastern.cs5500.starterbot.model.PokemonMove;
 import edu.northeastern.cs5500.starterbot.repository.GenericRepository;
 import java.util.Objects;
+import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -14,10 +15,13 @@ import org.bson.types.ObjectId;
 public class PokemonController {
 
     GenericRepository<Pokemon> pokemonRepository;
+    PokedexController pokedexController;
 
     @Inject
-    PokemonController(GenericRepository<Pokemon> pokemonRepository) {
+    PokemonController(
+            GenericRepository<Pokemon> pokemonRepository, PokedexController pokedexController) {
         this.pokemonRepository = pokemonRepository;
+        this.pokedexController = pokedexController;
     }
 
     /**
@@ -83,7 +87,11 @@ public class PokemonController {
 
     public Pokemon spawnRandomPokemon() {
         // Chosen randomly
-        return spawnPokemon(1);
+        int[] arr = {1, 4, 7, 19};
+        Random random = new Random();
+        int randomIndex = random.nextInt(arr.length);
+        int pokedex = arr[randomIndex];
+        return spawnPokemon(pokedex);
     }
 
     public Pokemon getPokemonById(String pokemonId) {
@@ -91,6 +99,10 @@ public class PokemonController {
     }
 
     public Pokemon getPokemonById(ObjectId pokemonId) {
-        return pokemonRepository.get(pokemonId);
+        return pokemonRepository.get(Objects.requireNonNull(pokemonId));
+    }
+
+    public int getPokedexByName(String pokemonName) {
+        return pokedexController.getSpeciesByName(pokemonName).getPokedexNumber();
     }
 }

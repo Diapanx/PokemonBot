@@ -13,6 +13,11 @@ import org.bson.types.ObjectId;
 @Data
 @AllArgsConstructor
 public class Pokemon implements Model {
+    public Pokemon() {
+        // Defined public.
+
+    }
+
     @Nonnull @Builder.Default ObjectId id = new ObjectId();
 
     @Nonnull Integer pokedexNumber;
