@@ -2,7 +2,6 @@ package edu.northeastern.cs5500.starterbot.command;
 
 import edu.northeastern.cs5500.starterbot.controller.PokemonController;
 import edu.northeastern.cs5500.starterbot.controller.TrainerController;
-import edu.northeastern.cs5500.starterbot.exception.PokemonNotExistException;
 import edu.northeastern.cs5500.starterbot.model.Trainer;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +18,10 @@ public class InventoryCommand implements SlashCommandHandler {
 
     static final String NAME = "inventory";
 
-    @Inject PokemonController pokemonController;
-    @Inject TrainerController trainerController;
+    @Inject
+    PokemonController pokemonController;
+    @Inject
+    TrainerController trainerController;
 
     @Inject
     public InventoryCommand() {
@@ -40,8 +41,7 @@ public class InventoryCommand implements SlashCommandHandler {
     }
 
     @Override
-    public void onSlashCommandInteraction(@Nonnull SlashCommandInteractionEvent event)
-            throws PokemonNotExistException {
+    public void onSlashCommandInteraction(@Nonnull SlashCommandInteractionEvent event) {
         log.info("event: /inventory");
         String trainerDiscordId = event.getMember().getId();
         Trainer trainer = trainerController.getTrainerForMemberId(trainerDiscordId);
@@ -55,7 +55,7 @@ public class InventoryCommand implements SlashCommandHandler {
         message.append(String.format("Player <@%s>'s Pokemon Inventory:%n", trainerDiscordId));
 
         for (String pokemonName : pokemonNameList) {
-            message.append("     " + pokemonName + "%n");
+            message.append("     " + pokemonName + "\n");
         }
         event.reply(message.toString()).setEphemeral(true).queue();
     }
