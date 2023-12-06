@@ -31,8 +31,10 @@ public class RepositoryModule {
         return UserPreference.class;
     }
 
-    // NOTE: You can use the following lines if you'd like to store objects in memory.
-    // NOTE: The presence of commented-out code in your project *will* result in a lowered grade.
+    // NOTE: You can use the following lines if you'd like to store objects in
+    // memory.
+    // NOTE: The presence of commented-out code in your project *will* result in a
+    // lowered grade.
     @Provides
     public GenericRepository<Trainer> provideTrainerRepository(
             MongoDBRepository<Trainer> repository) {
@@ -45,8 +47,8 @@ public class RepositoryModule {
     }
     // @Provides
     // public GenericRepository<UserPreference> provideUserPreferencesRepository(
-    //         InMemoryRepository<UserPreference> repository) {
-    //     return repository;
+    // InMemoryRepository<UserPreference> repository) {
+    // return repository;
     // }
 
     @Provides

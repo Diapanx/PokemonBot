@@ -3,5 +3,4 @@ package edu.northeastern.cs5500.starterbot.exception;
 import lombok.experimental.StandardException;
 
 @StandardException
-public class InvalidTeamPositionException extends Exception {
-}
+public class InvalidTeamPositionException extends Exception {}

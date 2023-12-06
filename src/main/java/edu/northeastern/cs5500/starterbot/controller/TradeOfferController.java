@@ -65,6 +65,10 @@ public class TradeOfferController {
         tradeOfferRepository.delete(parentOffer.getId());
     }
 
+    public void declineOffer(TradeOffer tradeOffer) {
+        tradeOfferRepository.delete(tradeOffer.getId());
+    }
+
     public int getResources() {
         InputStream stream = this.getClass().getResourceAsStream("/pokemon.json");
         try {
@@ -98,15 +102,13 @@ public class TradeOfferController {
         return trainerOpenTrades;
     }
 
-    // public List<TradeOffer> getOffersForTrainer(Trainer trainer) {
-    // List<TradeOffer> offers = new ArrayList<>();
-    // for (TradeOffer tradeOffer : findAllOpenTradeforUser()) {
-    // if
-    // (getTradeById(tradeOffer.getParent()).getTrainerId().equals(trainer.getId()))
-    // {
-    // offers.add(tradeOffer);
-    // }
-    // }
-    // return offers;
-    // }
+    public TradeOffer getTradeByTrainerAndPokemon(Trainer trainer, Pokemon pokemon) {
+        for (TradeOffer trade : getAllOpenTrades()) {
+            if (trade.getTrainerId().equals(trainer.getId())
+                    && trade.getPokemonId().equals(pokemon.getId())) {
+                return trade;
+            }
+        }
+        return null;
+    }
 }

@@ -78,4 +78,18 @@ public class CommandModule {
     public ButtonHandler provideSpawnCommandClickHandler(SpawnCommand command) {
         return command;
     }
+
+    @Provides
+    @IntoMap
+    @StringKey(TradeCommand.NAME)
+    public SlashCommandHandler provideTradeCommand(TradeCommand tradeCommand) {
+        return tradeCommand;
+    }
+
+    @Provides
+    @IntoMap
+    @StringKey(TradeCommand.NAME)
+    public ButtonHandler provideTradeCommandClickHandler(TradeCommand tradeCommand) {
+        return tradeCommand;
+    }
 }
