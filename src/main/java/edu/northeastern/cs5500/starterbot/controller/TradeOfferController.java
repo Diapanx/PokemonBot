@@ -18,13 +18,16 @@ import org.bson.types.ObjectId;
 public class TradeOfferController {
     GenericRepository<TradeOffer> tradeOfferRepository;
     TrainerController trainerController;
+    PokemonController pokemonController;
 
     @Inject
     public TradeOfferController(
             GenericRepository<TradeOffer> tradeOfferRepository,
-            TrainerController trainerController) {
+            TrainerController trainerController,
+            PokemonController pokemonController) {
         this.tradeOfferRepository = tradeOfferRepository;
         this.trainerController = trainerController;
+        this.pokemonController = pokemonController;
     }
 
     public TradeOffer createNewOffering(Trainer trainer, Pokemon pokemon)
@@ -44,7 +47,7 @@ public class TradeOfferController {
             trainerController.removePokemonFromTrainer(trainer, pokemon);
             TradeOffer responseOffering = new TradeOffer(trainer.getId(), pokemon.getId());
             responseOffering.setParent(tradeOffer.getId());
-            return tradeOfferRepository.add(Objects.requireNonNull(tradeOffer));
+            return tradeOfferRepository.add(Objects.requireNonNull(responseOffering));
         } catch (PokemonNotExistException e) {
             return null;
         }
@@ -102,10 +105,9 @@ public class TradeOfferController {
         return trainerOpenTrades;
     }
 
-    public TradeOffer getTradeByTrainerAndPokemon(Trainer trainer, Pokemon pokemon) {
-        for (TradeOffer trade : getAllOpenTrades()) {
-            if (trade.getTrainerId().equals(trainer.getId())
-                    && trade.getPokemonId().equals(pokemon.getId())) {
+    public TradeOffer getTradeByTrainerAndPokemon(Trainer trainer, String pokemonName) {
+        for (TradeOffer trade : getOpenTradesByTrainer(trainer)) {
+            if (pokemonController.getNameById(trade.getPokemonId()).equals(pokemonName)) {
                 return trade;
             }
         }
