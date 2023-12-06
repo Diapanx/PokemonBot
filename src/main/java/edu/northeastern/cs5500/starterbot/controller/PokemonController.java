@@ -88,7 +88,7 @@ public class PokemonController {
 
     public Pokemon spawnRandomPokemon() {
         // Chosen randomly
-        int[] arr = {1, 4, 7, 19};
+        int[] arr = { 1, 4, 7, 19 };
         Random random = new Random();
         int randomIndex = random.nextInt(arr.length);
         int pokedex = arr[randomIndex];
@@ -109,8 +109,7 @@ public class PokemonController {
 
     public String getNameById(ObjectId pokemonId) {
         Pokemon pokemon = getPokemonById(pokemonId);
-        PokemonSpecies pokemonSpecies =
-                pokedexController.getPokemonSpeciesByNumber(pokemon.getPokedexNumber());
+        PokemonSpecies pokemonSpecies = pokedexController.getPokemonSpeciesByNumber(pokemon.getPokedexNumber());
         return pokemonSpecies.getName();
     }
 }
