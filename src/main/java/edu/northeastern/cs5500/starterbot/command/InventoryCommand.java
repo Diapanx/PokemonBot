@@ -18,10 +18,8 @@ public class InventoryCommand implements SlashCommandHandler {
 
     static final String NAME = "inventory";
 
-    @Inject
-    PokemonController pokemonController;
-    @Inject
-    TrainerController trainerController;
+    @Inject PokemonController pokemonController;
+    @Inject TrainerController trainerController;
 
     @Inject
     public InventoryCommand() {

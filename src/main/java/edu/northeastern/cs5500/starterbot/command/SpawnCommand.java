@@ -78,10 +78,12 @@ public class SpawnCommand implements SlashCommandHandler, ButtonHandler {
         Pokemon pokemon = pokemonController.getPokemonById(pokemonId);
         PokemonSpecies species = pokedexController.getPokemonSpeciesByNumber(pokemon.getPokedexNumber());
 
-        event.reply(
-                String.format(
-                        "Player <@%s> caught Pokemon %s",
-                        trainerDiscordId, species.getName()))
+        event.deferEdit().queue();
+        event.getHook()
+                .sendMessage(
+                        String.format(
+                                "Player <@%s> caught Pokemon %s",
+                                trainerDiscordId, species.getName()))
                 .queue();
     }
 }

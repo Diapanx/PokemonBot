@@ -92,4 +92,11 @@ public class CommandModule {
     public ButtonHandler provideTradeCommandClickHandler(TradeCommand tradeCommand) {
         return tradeCommand;
     }
+
+    @Provides
+    @IntoMap
+    @StringKey(InventoryCommand.NAME)
+    public SlashCommandHandler provideInventoryCommand(InventoryCommand inventoryCommand) {
+        return inventoryCommand;
+    }
 }
