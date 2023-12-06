@@ -105,12 +105,12 @@ public class PokemonController {
 
     public int getPokedexByName(String pokemonName) {
         return pokedexController.getSpeciesByName(pokemonName).getPokedexNumber();
-    }
 
     public String getNameById(ObjectId pokemonId) {
         Pokemon pokemon = getPokemonById(pokemonId);
         PokemonSpecies pokemonSpecies =
                 pokedexController.getPokemonSpeciesByNumber(pokemon.getPokedexNumber());
         return pokemonSpecies.getName();
+
     }
 }
