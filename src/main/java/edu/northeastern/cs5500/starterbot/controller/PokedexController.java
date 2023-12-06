@@ -48,7 +48,7 @@ public class PokedexController {
         return Objects.requireNonNull(builder.build());
     }
 
-    public PokemonSpecies getSpeciesByName(@Nonnull String name) {
+    public PokemonSpecies getSpeciesByName(String name) {
         PokemonSpeciesBuilder builder = PokemonSpecies.builder();
         builder.name(name);
         switch (name) {
