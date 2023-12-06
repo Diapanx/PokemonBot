@@ -160,6 +160,7 @@ public class TradeCommand implements SlashCommandHandler, ButtonHandler {
     @Override
     public void onButtonInteraction(@Nonnull ButtonInteractionEvent event) {
         TradeOffer parent = tradeOfferController.getTradeById(getRespondTrade().getParent());
+
         Trainer parentTrainer = trainerController.getTrainerForId(parent.getTrainerId());
         if (event.getMember().getId().equals(parentTrainer.getDiscordUserId())) {
             String buttonId = event.getComponentId();
