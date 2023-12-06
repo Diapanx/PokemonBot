@@ -9,6 +9,8 @@ import edu.northeastern.cs5500.starterbot.exception.PokemonNotExistException;
 import edu.northeastern.cs5500.starterbot.model.Pokemon;
 import edu.northeastern.cs5500.starterbot.model.TradeOffer;
 import edu.northeastern.cs5500.starterbot.model.Trainer;
+import java.util.ArrayList;
+import java.util.Collections;
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -135,8 +137,9 @@ public class TradeCommand implements SlashCommandHandler, ButtonHandler {
                                                 trainerPokemonName);
                                 TradeOffer parentTrade = tradeOfferController.getTradeByTrainerAndPokemon(
                                                 tradeTrainer, tradePokemonName);
-                                setRespondTrade(tradeOfferController.respondToOffering(
-                                                parentTrade, trainer, trainerPokemon));
+                                setRespondTrade(
+                                                tradeOfferController.respondToOffering(
+                                                                parentTrade, trainer, trainerPokemon));
                                 MessageCreateBuilder messageCreateBuilder = new MessageCreateBuilder();
                                 messageCreateBuilder = messageCreateBuilder.addActionRow(
                                                 Button.primary(getName() + ":accept", "Accept"),
@@ -158,28 +161,31 @@ public class TradeCommand implements SlashCommandHandler, ButtonHandler {
         @Override
         public void onButtonInteraction(@Nonnull ButtonInteractionEvent event) {
                 TradeOffer parent = tradeOfferController.getTradeById(getRespondTrade().getParent());
-                if (event.getMember()
-                                .getId()
-                                .equals(
-                                                trainerController
-                                                                .getTrainerForId(parent.getTrainerId())
-                                                                .getDiscordUserId())) {
+                Trainer parentTrainer = trainerController.getTrainerForId(parent.getTrainerId());
+                if (event.getMember().getId().equals(parentTrainer.getDiscordUserId())) {
+                        String buttonId = event.getComponentId();
+                        String message = "";
+                        if (buttonId.endsWith(":accept")) {
+                                tradeOfferController.acceptOffer(getRespondTrade());
+                                Trainer trainer = trainerController.getTrainerForId(getRespondTrade().getTrainerId());
+                                message = String.format(
+                                                "Player <@%s> has traded %s with Player <@%s>'s %s.",
+                                                parentTrainer.getDiscordUserId(),
+                                                pokemonController.getNameById(parent.getPokemonId()),
+                                                trainer.getDiscordUserId(),
+                                                pokemonController.getNameById(getRespondTrade().getPokemonId()));
+                        } else if (buttonId.endsWith(":decline")) {
+                                tradeOfferController.declineOffer(getRespondTrade());
+                                message = "This offer has been declined.";
+                        }
+                        event.deferEdit().queue();
+                        event.getHook()
+                                        .editOriginal(message)
+                                        .setEmbeds(new ArrayList<>())
+                                        .setComponents(Collections.emptyList())
+                                        .queue();
+                } else {
                         event.reply("You can only interact with your own trade.").setEphemeral(true).queue();
-                }
-                String buttonId = event.getComponentId();
-                if (buttonId.endsWith(":accept")) {
-                        tradeOfferController.acceptOffer(getRespondTrade());
-                        String message = String.format(
-                                        "Player <@%s> has traded %s with Player <@%s>'s %s.",
-                                        trainerController.getTrainerForId(getRespondTrade().getTrainerId())
-                                                        .getDiscordUserId(),
-                                        pokemonController.getNameById(getRespondTrade().getPokemonId()),
-                                        trainerController.getTrainerForId(parent.getTrainerId()),
-                                        pokemonController.getNameById(parent.getPokemonId()));
-                        event.reply(message).queue();
-                } else if (buttonId.endsWith(":decline")) {
-                        tradeOfferController.declineOffer(parent);
-                        event.reply("The offer has been declined.").queue();
                 }
         }
 

@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.bson.types.ObjectId;
@@ -69,7 +70,11 @@ public class TradeOfferController {
     }
 
     public void declineOffer(TradeOffer tradeOffer) {
+        Trainer trainer = trainerController.getTrainerForId(tradeOffer.getTrainerId());
+        trainerController.addPokemonToTrainer(
+                trainer.getDiscordUserId(), tradeOffer.getPokemonId().toString());
         tradeOfferRepository.delete(tradeOffer.getId());
+
     }
 
     public int getResources() {
@@ -81,7 +86,7 @@ public class TradeOfferController {
         }
     }
 
-    public TradeOffer getTradeById(ObjectId tradeOfferId) {
+    public TradeOffer getTradeById(@Nonnull ObjectId tradeOfferId) {
         return tradeOfferRepository.get(tradeOfferId);
     }
 
