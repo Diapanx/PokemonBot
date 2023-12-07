@@ -5,6 +5,8 @@ import edu.northeastern.cs5500.starterbot.controller.PokemonController;
 import edu.northeastern.cs5500.starterbot.controller.TrainerController;
 import edu.northeastern.cs5500.starterbot.model.Pokemon;
 import edu.northeastern.cs5500.starterbot.model.PokemonSpecies;
+import java.util.ArrayList;
+import java.util.Collections;
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -78,12 +80,15 @@ public class SpawnCommand implements SlashCommandHandler, ButtonHandler {
         PokemonSpecies species =
                 pokedexController.getPokemonSpeciesByNumber(pokemon.getPokedexNumber());
 
+        String message =
+                String.format(
+                        "Player <@%s> caught a wild %s!", trainerDiscordId, species.getName());
+
         event.deferEdit().queue();
         event.getHook()
-                .sendMessage(
-                        String.format(
-                                "Player <@%s> caught Pokemon %s",
-                                trainerDiscordId, species.getName()))
+                .editOriginal(message)
+                .setEmbeds(new ArrayList<>())
+                .setComponents(Collections.emptyList())
                 .queue();
     }
 }
