@@ -5,6 +5,8 @@ import edu.northeastern.cs5500.starterbot.controller.PokemonController;
 import edu.northeastern.cs5500.starterbot.controller.TrainerController;
 import edu.northeastern.cs5500.starterbot.model.Pokemon;
 import edu.northeastern.cs5500.starterbot.model.PokemonSpecies;
+import edu.northeastern.cs5500.starterbot.model.PokemonType;
+import java.util.List;
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -54,7 +56,21 @@ public class SpawnCommand implements SlashCommandHandler, ButtonHandler {
 
         EmbedBuilder embedBuilder = new EmbedBuilder();
         embedBuilder.setTitle(String.format("A wild %s appears!", species.getName()));
-        embedBuilder.addField("Level", Integer.toString(pokemon.getLevel()), false);
+        // embedBuilder.addField("Level", Integer.toString(pokemon.getLevel()), false);
+        List<PokemonType> types = pokemon.getTypes();
+        StringBuilder typesString = new StringBuilder();
+        for (int i = 0; i < types.size(); i++) {
+            PokemonType type = types.get(i);
+            typesString.append(type.getName()).append(" ").append(type.getEmoji());
+
+            // Add a comma and space if it's not the last type
+            if (i < types.size() - 1) {
+                typesString.append(", ");
+            }
+        }
+        String typesAsString = typesString.toString();
+
+        embedBuilder.addField("Type", typesAsString, false);
         embedBuilder.setThumbnail(species.getImageUrl());
 
         MessageCreateBuilder messageCreateBuilder = new MessageCreateBuilder();

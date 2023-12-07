@@ -1,5 +1,7 @@
 package edu.northeastern.cs5500.starterbot.model;
 
+import java.util.List;
+import java.util.Map;
 import javax.annotation.Nonnull;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +16,9 @@ public class PokemonSpecies {
 
     @Nonnull final String name;
 
-    @Nonnull final PokemonType[] types;
+    @Nonnull final List<PokemonType> types;
+
+    @Nonnull final Map<String, Integer> base;
 
     MoveEffectiveness getEffectiveness(PokemonType attackType) {
         return PokemonType.getEffectiveness(attackType, types);
