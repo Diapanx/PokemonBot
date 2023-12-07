@@ -93,32 +93,15 @@ public class TradeCommand implements SlashCommandHandler, ButtonHandler {
                 String pokemonName = event.getOption("pokemon-name").getAsString();
                 Pokemon pokemon = trainerController.getInventoryPokemonByName(trainer, pokemonName);
                 tradeOfferController.createNewOffering(trainer, pokemon);
-                event.reply(
-                                String.format(
-                                        "Player <@%s> has listed %s for trade.",
-                                        trainerDiscordId, pokemonName))
-                        .queue();
+                String message =
+                        String.format(
+                                "Player <@%s> has listed %s for trade.",
+                                trainerDiscordId, pokemonName);
+                event.reply(message).queue();
                 break;
             case "view":
                 String mentionedUserId = event.getOption("user").getAsMember().getId();
-                Trainer mentionedTrainer = trainerController.getTrainerForMemberId(mentionedUserId);
-                StringBuilder avaliableTrades = new StringBuilder();
-                avaliableTrades.append(
-                        String.format("Player <@%s>'s Open Trades:%n", mentionedUserId));
-                for (TradeOffer openTrade :
-                        tradeOfferController.getOpenTradesByTrainer(mentionedTrainer)) {
-                    Pokemon pokemonForTrade =
-                            pokemonController.getPokemonById(openTrade.getPokemonId());
-                    avaliableTrades
-                            .append(
-                                    "     "
-                                            + pokedexController
-                                                    .getPokemonSpeciesByNumber(
-                                                            pokemonForTrade.getPokedexNumber())
-                                                    .getName())
-                            .append("\n");
-                }
-                event.reply(avaliableTrades.toString()).setEphemeral(true).queue();
+                event.reply(avaliableTradeString(mentionedUserId)).setEphemeral(true).queue();
                 break;
             case "with":
                 String tradeUserId = event.getOption("user").getAsMember().getId();
@@ -129,14 +112,8 @@ public class TradeCommand implements SlashCommandHandler, ButtonHandler {
                 Trainer tradeTrainer = trainerController.getTrainerForMemberId(tradeUserId);
                 String trainerPokemonName = event.getOption("your-pokemon").getAsString();
                 String tradePokemonName = event.getOption("their-pokemon").getAsString();
-                Pokemon trainerPokemon =
-                        trainerController.getInventoryPokemonByName(trainer, trainerPokemonName);
-                TradeOffer parentTrade =
-                        tradeOfferController.getTradeByTrainerAndPokemon(
-                                tradeTrainer, tradePokemonName);
-                setRespondTrade(
-                        tradeOfferController.respondToOffering(
-                                parentTrade, trainer, trainerPokemon));
+                offerTrade(trainer, tradeTrainer, trainerPokemonName, tradePokemonName);
+
                 MessageCreateBuilder messageCreateBuilder = new MessageCreateBuilder();
                 messageCreateBuilder =
                         messageCreateBuilder.addActionRow(
@@ -197,5 +174,37 @@ public class TradeCommand implements SlashCommandHandler, ButtonHandler {
 
     private static void setRespondTrade(TradeOffer tradeOffer) {
         respondTrade = tradeOffer;
+    }
+
+    private String avaliableTradeString(String discordId) {
+        Trainer mentionedTrainer = trainerController.getTrainerForMemberId(discordId);
+        StringBuilder avaliableTrades = new StringBuilder();
+        avaliableTrades.append(String.format("Player <@%s>'s Open Trades:%n", discordId));
+        for (TradeOffer openTrade : tradeOfferController.getOpenTradesByTrainer(mentionedTrainer)) {
+            Pokemon pokemonForTrade = pokemonController.getPokemonById(openTrade.getPokemonId());
+            avaliableTrades
+                    .append(
+                            "     "
+                                    + pokedexController
+                                            .getPokemonSpeciesByNumber(
+                                                    pokemonForTrade.getPokedexNumber())
+                                            .getName())
+                    .append("\n");
+        }
+        return avaliableTrades.toString();
+    }
+
+    private void offerTrade(
+            Trainer trainer,
+            Trainer tradeTrainer,
+            String trainerPokemonName,
+            String tradePokemonName)
+            throws PokemonNotExistException {
+        Pokemon trainerPokemon =
+                trainerController.getInventoryPokemonByName(trainer, trainerPokemonName);
+        TradeOffer parentTrade =
+                tradeOfferController.getTradeByTrainerAndPokemon(tradeTrainer, tradePokemonName);
+        setRespondTrade(
+                tradeOfferController.respondToOffering(parentTrade, trainer, trainerPokemon));
     }
 }
