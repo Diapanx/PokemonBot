@@ -22,10 +22,10 @@ public class PokedexController {
 
     @Inject
     PokedexController() {
-        System.out.println("Current Directory: " + System.getProperty("user.dir"));
+        // System.out.println("Current Directory: " + System.getProperty("user.dir"));
 
         pokemonConfigs = loadPokemonConfigs();
-        System.out.println("pokemon config is " + pokemonConfigs);
+        // System.out.println("pokemon config is " + pokemonConfigs);
     }
 
     // Get the parsed Pokemon Config

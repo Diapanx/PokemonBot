@@ -49,15 +49,15 @@ public class PokemonController {
         builder.types(species.getTypes());
         builder.imageUrl(species.getImageUrl());
 
-        System.out.println(builder.build());
+        // System.out.println(builder.build());
         return pokemonRepository.add(Objects.requireNonNull(builder.build()));
     }
 
     public Pokemon spawnRandomPokemon() {
         // Chosen randomly
         Random random = new Random();
-        int randomIndex = random.nextInt(898) + 1;
-        System.out.println("random number is " + randomIndex);
+        int randomIndex = random.nextInt(500) + 1;
+        // System.out.println("random number is " + randomIndex);
         return spawnPokemon(randomIndex);
     }
 
