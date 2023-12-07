@@ -2,9 +2,6 @@ package edu.northeastern.cs5500.starterbot.controller;
 
 import edu.northeastern.cs5500.starterbot.model.Pokemon;
 import edu.northeastern.cs5500.starterbot.model.Pokemon.PokemonBuilder;
-
-import edu.northeastern.cs5500.starterbot.model.PokemonMove;
-
 import edu.northeastern.cs5500.starterbot.model.PokemonSpecies;
 import edu.northeastern.cs5500.starterbot.repository.GenericRepository;
 import java.util.Map;
