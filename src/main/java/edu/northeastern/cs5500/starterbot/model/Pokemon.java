@@ -14,8 +14,8 @@ import org.bson.types.ObjectId;
 @AllArgsConstructor
 public class Pokemon implements Model {
     public Pokemon() {
-        // Defined public.
-
+        this.id = new ObjectId();
+        this.level = 5;
     }
 
     @Nonnull @Builder.Default ObjectId id = new ObjectId();
@@ -33,6 +33,9 @@ public class Pokemon implements Model {
     @Nonnull Integer specialAttack;
     @Nonnull Integer specialDefense;
     @Nonnull Integer speed;
+    @Nonnull String name;
+    @Nonnull List<PokemonType> types;
+    @Nonnull String imageUrl;
 
     @Singular @Nonnull List<PokemonMove> moves;
 }
