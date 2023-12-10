@@ -22,11 +22,14 @@ public enum PokemonMove {
     METAL_CLAW("Bite", 50, PokemonType.STEEL),
     FAIRY_WIND("Fairy Wind", 40, PokemonType.FAIRY);
 
-    @Getter String name;
+    @Getter
+    String name;
 
-    @Getter int power;
+    @Getter
+    int power;
 
-    @Getter PokemonType type;
+    @Getter
+    PokemonType type;
 
     PokemonMove(String name, int power, PokemonType type) {
         this.name = name;
