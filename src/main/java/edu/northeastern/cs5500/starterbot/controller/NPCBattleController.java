@@ -31,11 +31,12 @@ public class NPCBattleController {
         return new NPCBattle(trainer, trainerPokemon, npcPokemon);
     }
 
-    private boolean checkBattleEndConditions(NPCBattle npcBattle) {
-        if (npcBattle.getTrainerPokemon().getCurrentHp() == 0 || npcBattle.getNpcPokemon().getCurrentHp() == 0) {
-            return true;
-        }
-        return false;
+    public boolean checkIfBattleEnds(NPCBattle npcBattle) {
+        return (npcBattle.getTrainerPokemon().getCurrentHp() == 0 || npcBattle.getNpcPokemon().getCurrentHp() == 0);
+    }
+
+    public boolean checkIfPokemonInventoryIsNull(Trainer trainer) {
+        return trainer.getPokemonInventory().isEmpty();
     }
 
 }
