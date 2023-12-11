@@ -99,4 +99,11 @@ public class CommandModule {
     public SlashCommandHandler provideInventoryCommand(InventoryCommand inventoryCommand) {
         return inventoryCommand;
     }
+
+    @Provides
+    @IntoMap
+    @StringKey(HelpCommand.NAME)
+    public SlashCommandHandler provideHelpCommand(HelpCommand helpCommand) {
+        return helpCommand;
+    }
 }
