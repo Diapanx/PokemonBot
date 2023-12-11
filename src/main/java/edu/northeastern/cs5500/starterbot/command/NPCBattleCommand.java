@@ -30,10 +30,14 @@ public class NPCBattleCommand implements SlashCommandHandler, ButtonHandler {
     private static String trainerDiscordId;
     private static NPCBattle npcBattle;
 
-    @Inject NPCBattleController npcBattleController;
-    @Inject PokemonController pokemonController;
-    @Inject TrainerController trainerController;
-    @Inject PokedexController pokedexController;
+    @Inject
+    NPCBattleController npcBattleController;
+    @Inject
+    PokemonController pokemonController;
+    @Inject
+    TrainerController trainerController;
+    @Inject
+    PokedexController pokedexController;
 
     @Inject
     public NPCBattleCommand() {
@@ -73,19 +77,17 @@ public class NPCBattleCommand implements SlashCommandHandler, ButtonHandler {
             Pokemon npcPokemon = npcBattle.getNpcPokemon();
             Pokemon trainerPokemon = npcBattle.getTrainerPokemon();
             while (!npcBattleController.checkIfBattleEnds(npcBattle)) {
-                if (npcBattleController.checkWhosTurn(npcBattle).equals(npcPokemon)) {
+                if (npcBattleController.takeTurn(npcBattle).equals(npcPokemon)) {
                     npcBattleController.performNPCAttack(npcBattle, npcPokemon);
-                } else if (npcBattleController.checkWhosTurn(npcBattle).equals(trainerPokemon)) {
+                } else if (npcBattleController.takeTurn(npcBattle).equals(trainerPokemon)) {
                     MessageCreateBuilder messageCreateBuilder = new MessageCreateBuilder();
-                    messageCreateBuilder =
-                            messageCreateBuilder.addActionRow(
-                                    Button.primary(getName() + ":attack", "Attack"),
-                                    Button.danger(getName() + ":specialAttack", "SpecialAttack"));
-                    messageCreateBuilder =
-                            messageCreateBuilder.setContent(
-                                    String.format(
-                                            "Its <@%s>'s turn now, Please select your action:",
-                                            trainerDiscordId));
+                    messageCreateBuilder = messageCreateBuilder.addActionRow(
+                            Button.primary(getName() + ":attack", "Attack"),
+                            Button.danger(getName() + ":specialAttack", "SpecialAttack"));
+                    messageCreateBuilder = messageCreateBuilder.setContent(
+                            String.format(
+                                    "Its <@%s>'s turn now, Please select your action:",
+                                    trainerDiscordId));
                     event.reply(messageCreateBuilder.build()).setEphemeral(true).queue();
                 } else {
                     event.reply("Unknow error occured.").setEphemeral(true).queue();

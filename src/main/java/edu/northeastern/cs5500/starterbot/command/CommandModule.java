@@ -99,4 +99,18 @@ public class CommandModule {
     public SlashCommandHandler provideInventoryCommand(InventoryCommand inventoryCommand) {
         return inventoryCommand;
     }
+
+    @Provides
+    @IntoMap
+    @StringKey(NPCBattleCommand.NAME)
+    public SlashCommandHandler provideNPCBattleCommand(NPCBattleCommand npcBattleCommand) {
+        return npcBattleCommand;
+    }
+
+    @Provides
+    @IntoMap
+    @StringKey(NPCBattleCommand.NAME)
+    public ButtonHandler provideNPCBattleCommandClickHandler(NPCBattleCommand npcBattleCommand) {
+        return npcBattleCommand;
+    }
 }

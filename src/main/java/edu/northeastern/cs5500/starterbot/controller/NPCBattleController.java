@@ -39,7 +39,7 @@ public class NPCBattleController {
         npcBattle.getTrainerPokemon().setCurrentHp(npcBattle.getTrainerPokemon().getHp());
     }
 
-    public Pokemon checkWhosTurn(NPCBattle npcBattle) {
+    public Pokemon takeTurn(NPCBattle npcBattle) {
         int npcPokemonAP = npcBattle.getTrainerPokemonAP();
         int trainerPokemonAP = npcBattle.getTrainerPokemonAP();
 
