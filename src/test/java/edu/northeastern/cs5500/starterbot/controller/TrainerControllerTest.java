@@ -35,12 +35,25 @@ class TrainerControllerTest {
         return trainerController;
     }
 
+    /*
+     * Is this a positive or negative test?
+     * Positive
+     * If this test passes, what does it prove?
+     * That inserting a Pokemon to a team via the controller has an effect.
+     * If no exception is thrown, the Pokemon will move from the inventory to the team.
+     * If this test fails, what should be done?
+     * There must be a bug in either the controller or the repository; further debugging will be required
+     * Can this test provide false positives or false negatives?
+     * No
+     * Does this test cover implemented behavior or specified behavior?
+     * Specified behavior
+     */
     @Test
     void testFormTeam() throws InvalidTeamPositionException, PokemonNotExistException {
+        // setup
         PokedexController pokedexController = getPokedexController();
         PokemonController pokemonController = getPokemonController(pokedexController);
         TrainerController trainerController = getTrainerController(pokemonController);
-
         Trainer trainer = trainerController.getTrainerForMemberId(DISCORD_USER_ID_1);
         Pokemon bulbasaur = pokemonController.getPokemonById(trainer.getPokemonInventory().get(0));
 
@@ -62,6 +75,18 @@ class TrainerControllerTest {
         assertTrue(trainer.getPokemonInventory().size() == 1);
     }
 
+    /*
+     * Is this a positive or negative test?
+     * Positive
+     * If this test passes, what does it prove?
+     * That we can get the exact Pokemon in user's inventory by its name.
+     * If this test fails, what should be done?
+     * There must be a bug in either the controller or the repository; further debugging will be required
+     * Can this test provide false positives or false negatives?
+     * No
+     * Does this test cover implemented behavior or specified behavior?
+     * Implemented behavior
+     */
     @Test
     void testGetInventoryPokemonByName() throws PokemonNotExistException {
         PokedexController pokedexController = getPokedexController();
@@ -73,6 +98,18 @@ class TrainerControllerTest {
         assertEquals(pokemon, trainerController.getInventoryPokemonByName(trainer, "Bulbasaur"));
     }
 
+    /*
+     * Is this a positive or negative test?
+     * Positive
+     * If this test passes, what does it prove?
+     * That we can check whether a Pokemon exits in user's inventory.
+     * If this test fails, what should be done?
+     * There must be a bug in either the controller or the repository; further debugging will be required
+     * Can this test provide false positives or false negatives?
+     * No
+     * Does this test cover implemented behavior or specified behavior?
+     * Implemented behavior
+     */
     @Test
     void testPokemonIsInInventory() {
         PokedexController pokedexController = getPokedexController();
