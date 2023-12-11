@@ -38,8 +38,13 @@ public class HelpCommand implements SlashCommandHandler {
                         + "/help - Displays a list of available commands and their descriptions.\n"
                         + "/spawn - Meet a random wild Pokemon. You can try to catch the Pokemon.\n"
                         + "/inventory - Shows a list of Pokemon you currently have.\n"
-                        + "/team - Provides information about your currnt Pokemon team.\n"
-                        + "/trade - Initiates a trade process with an NPC, allowing you to exchange Pokemon.\n"
+                        + "/team - Provides information about your current Pokemon team. Subcommands:\n"
+                        + "    /team display - Display your current team.\n"
+                        + "    /team add [pokemon] [position] - Add a Pokemon to your team at a specified position.\n"
+                        + "/trade - Initiates a trade process with other players, allowing you to exchange Pokemon. Subcommands:\n"
+                        + "    /trade new [pokemon-name] - Create a new trade offer with a specific Pokemon.\n"
+                        + "    /trade view [user] - View all the open trades of a specific user.\n"
+                        + "    /trade with [user] [your-pokemon] [their-pokemon] - Initiate a trade with a player for specific Pokemon.\n"
                         + "/preferredname - Set or change your preferred nickname or title that the bot will use for you.";
 
         event.reply(helpMessage).queue();
