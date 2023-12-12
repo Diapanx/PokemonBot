@@ -10,7 +10,6 @@ import javax.inject.Inject;
 public class NPCBattleController {
     TrainerController trainerController;
     PokemonController pokemonController;
-    private static final int ACTION_THRESHOLD = 100;
 
     @Inject
     public NPCBattleController(
@@ -27,8 +26,8 @@ public class NPCBattleController {
     }
 
     public boolean checkIfBattleEnds(NPCBattle npcBattle) {
-        return (npcBattle.getTrainerPokemon().getCurrentHp() == 0
-                || npcBattle.getNpcPokemon().getCurrentHp() == 0);
+        return (npcBattle.getTrainerPokemon().getCurrentHp() <= 0
+                || npcBattle.getNpcPokemon().getCurrentHp() <= 0);
     }
 
     public boolean checkIfPokemonInventoryIsNull(Trainer trainer) {
@@ -39,42 +38,14 @@ public class NPCBattleController {
         npcBattle.getTrainerPokemon().setCurrentHp(npcBattle.getTrainerPokemon().getHp());
     }
 
-    public Pokemon takeTurn(NPCBattle npcBattle) {
-        int npcPokemonAP = npcBattle.getTrainerPokemonAP();
-        int trainerPokemonAP = npcBattle.getTrainerPokemonAP();
-
-        while (npcPokemonAP <= ACTION_THRESHOLD || trainerPokemonAP <= ACTION_THRESHOLD) {
-            npcPokemonAP += npcBattle.getNpcPokemon().getSpeed();
-            trainerPokemonAP += npcBattle.getTrainerPokemon().getSpeed();
-            if (npcBattle.getNpcPokemon().getSpeed() == 0
-                    || npcBattle.getTrainerPokemon().getSpeed() == 0) {
-                break;
-            }
-        }
-        npcBattle.setNpcPokemonAP(npcPokemonAP);
-        npcBattle.setTrainerPokemonAP(trainerPokemonAP);
-
-        if (npcPokemonAP >= trainerPokemonAP) {
-            npcBattle.setNpcPokemonAP(npcPokemonAP - ACTION_THRESHOLD);
-            return npcBattle.getNpcPokemon();
+    public void performNPCAttack(NPCBattle npcBattle) {
+        Random random = new Random();
+        // Assuming 0 for attack and 1 for specialAttack
+        int attackType = random.nextInt(2);
+        if (attackType == 0) {
+            basicAttack(npcBattle.getNpcPokemon(), npcBattle.getTrainerPokemon());
         } else {
-            npcBattle.setTrainerPokemonAP(trainerPokemonAP - ACTION_THRESHOLD);
-            return npcBattle.getTrainerPokemon();
-        }
-    }
-
-    public void performNPCAttack(NPCBattle npcBattle, Pokemon pokemon) {
-        if (npcBattle.getNpcPokemon().equals(pokemon)) {
-            Random random = new Random();
-            // Assuming 0 for attack and 1 for specialAttack
-            int attackType = random.nextInt(2);
-            if (attackType == 0) {
-                basicAttack(pokemon, npcBattle.getTrainerPokemon());
-            } else {
-                specialAttack(pokemon, npcBattle.getTrainerPokemon());
-            }
-        } else {
-            throw new IllegalStateException("Unknown error occured");
+            specialAttack(npcBattle.getNpcPokemon(), npcBattle.getTrainerPokemon());
         }
     }
 
@@ -83,7 +54,8 @@ public class NPCBattleController {
         int defenseValue = defensePokemon.getDefense();
         int defensePokemonCurrentHP = defensePokemon.getCurrentHp();
         int damage = Math.max(1, attackValue - defenseValue);
-        defensePokemon.setCurrentHp(defensePokemonCurrentHP - damage);
+        int newHP = Math.max(0, defensePokemonCurrentHP - damage);
+        defensePokemon.setCurrentHp(newHP);
     }
 
     public void specialAttack(Pokemon attackPokemon, Pokemon defensePokemon) {
@@ -91,6 +63,7 @@ public class NPCBattleController {
         int defenseValue = defensePokemon.getSpecialDefense();
         int defensePokemonCurrentHP = defensePokemon.getCurrentHp();
         int damage = Math.max(1, attackValue - defenseValue);
-        defensePokemon.setCurrentHp(defensePokemonCurrentHP - damage);
+        int newHP = Math.max(0, defensePokemonCurrentHP - damage);
+        defensePokemon.setCurrentHp(newHP);
     }
 }

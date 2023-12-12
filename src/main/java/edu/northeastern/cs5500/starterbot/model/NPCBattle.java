@@ -4,15 +4,11 @@ public class NPCBattle {
     Trainer trainer;
     Pokemon trainerPokemon;
     Pokemon npcPokemon;
-    int trainerPokemonAP;
-    int npcPokemonAP;
 
     public NPCBattle(Trainer trainer, Pokemon trainerPokemon, Pokemon npcPokemon) {
         this.trainer = trainer;
         this.trainerPokemon = trainerPokemon;
         this.npcPokemon = npcPokemon;
-        this.trainerPokemonAP = trainerPokemon.getSpeed();
-        this.npcPokemonAP = npcPokemon.getSpeed();
     }
 
     public Trainer getTrainer() {
@@ -37,21 +33,5 @@ public class NPCBattle {
 
     public void setNpcPokemon(Pokemon npcPokemon) {
         this.npcPokemon = npcPokemon;
-    }
-
-    public int getTrainerPokemonAP() {
-        return trainerPokemonAP;
-    }
-
-    public void setTrainerPokemonAP(int trainerPokemonAP) {
-        this.trainerPokemonAP = trainerPokemonAP;
-    }
-
-    public int getNpcPokemonAP() {
-        return npcPokemonAP;
-    }
-
-    public void setNpcPokemonAP(int npcPokemonAP) {
-        this.npcPokemonAP = npcPokemonAP;
     }
 }
