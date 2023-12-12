@@ -50,20 +50,17 @@ public class NPCBattleController {
     }
 
     public void basicAttack(Pokemon attackPokemon, Pokemon defensePokemon) {
-        int attackValue = attackPokemon.getAttack();
-        int defenseValue = defensePokemon.getDefense();
-        int defensePokemonCurrentHP = defensePokemon.getCurrentHp();
-        int damage = Math.max(1, attackValue - defenseValue);
-        int newHP = Math.max(0, defensePokemonCurrentHP - damage);
+        // deals minimum 1 damage if attack is less than defense.
+        int damage = Math.min(1, attackPokemon.getAttack() - defensePokemon.getDefense());
+        int newHP = Math.max(0, defensePokemon.getCurrentHp() - damage);
         defensePokemon.setCurrentHp(newHP);
     }
 
     public void specialAttack(Pokemon attackPokemon, Pokemon defensePokemon) {
-        int attackValue = attackPokemon.getSpecialAttack();
-        int defenseValue = defensePokemon.getSpecialDefense();
-        int defensePokemonCurrentHP = defensePokemon.getCurrentHp();
-        int damage = Math.max(1, attackValue - defenseValue);
-        int newHP = Math.max(0, defensePokemonCurrentHP - damage);
+        // deals minimum 1 damaged if attack is less than defense.
+        int damage =
+                Math.min(1, attackPokemon.getSpecialAttack() - defensePokemon.getSpecialDefense());
+        int newHP = Math.max(0, defensePokemon.getCurrentHp() - damage);
         defensePokemon.setCurrentHp(newHP);
     }
 }

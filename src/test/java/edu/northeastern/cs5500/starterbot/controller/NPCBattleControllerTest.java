@@ -11,7 +11,7 @@ import edu.northeastern.cs5500.starterbot.model.Trainer;
 import edu.northeastern.cs5500.starterbot.repository.InMemoryRepository;
 import org.junit.jupiter.api.Test;
 
-public class NPCBattleControllerTest {
+class NPCBattleControllerTest {
 
     final String DISCORD_USER_ID_1 = "discordUserId1";
     final String DISCORD_USER_ID_2 = "discordUserId2";
@@ -94,22 +94,6 @@ public class NPCBattleControllerTest {
     }
 
     @Test
-    void testCheckWhoAttacksFirst() throws PokemonNotExistException {
-        PokedexController pokedexController = getPokedexController();
-        PokemonController pokemonController = getPokemonController(pokedexController);
-        TrainerController trainerController = getTrainerController(pokemonController);
-        NPCBattleController npcBattleController =
-                getBattleController(trainerController, pokemonController);
-
-        Trainer trainer = trainerController.getTrainerForMemberId(DISCORD_USER_ID_1);
-        Pokemon trainerPokemon =
-                pokemonController.getPokemonById(trainer.getPokemonInventory().get(0));
-        NPCBattle npcBattle = npcBattleController.startBattle(trainer, trainerPokemon.getName());
-
-        if (npcBattle.getNpcPokemon().getSpeed() > trainerPokemon.getSpeed()) {}
-    }
-
-    @Test
     void testBasicAttack() throws PokemonNotExistException {
         PokedexController pokedexController = getPokedexController();
         PokemonController pokemonController = getPokemonController(pokedexController);
@@ -121,5 +105,51 @@ public class NPCBattleControllerTest {
         Pokemon trainerPokemon =
                 pokemonController.getPokemonById(trainer.getPokemonInventory().get(0));
         NPCBattle npcBattle = npcBattleController.startBattle(trainer, trainerPokemon.getName());
+
+        Pokemon npcPokemon = npcBattle.getNpcPokemon();
+        Integer damage = Math.min(1, npcPokemon.getAttack() - trainerPokemon.getDefense());
+        Integer newHP = Math.max(0, trainerPokemon.getCurrentHp() - damage);
+
+        npcBattleController.basicAttack(npcPokemon, trainerPokemon);
+        assertEquals(newHP, trainerPokemon.getCurrentHp());
+    }
+
+    @Test
+    void testSpecialAttack() throws PokemonNotExistException {
+        PokedexController pokedexController = getPokedexController();
+        PokemonController pokemonController = getPokemonController(pokedexController);
+        TrainerController trainerController = getTrainerController(pokemonController);
+        NPCBattleController npcBattleController =
+                getBattleController(trainerController, pokemonController);
+
+        Trainer trainer = trainerController.getTrainerForMemberId(DISCORD_USER_ID_1);
+        Pokemon trainerPokemon =
+                pokemonController.getPokemonById(trainer.getPokemonInventory().get(0));
+        NPCBattle npcBattle = npcBattleController.startBattle(trainer, trainerPokemon.getName());
+
+        Pokemon npcPokemon = npcBattle.getNpcPokemon();
+        Integer damage =
+                Math.min(1, npcPokemon.getSpecialAttack() - trainerPokemon.getSpecialDefense());
+        Integer newHP = Math.max(0, trainerPokemon.getCurrentHp() - damage);
+
+        npcBattleController.specialAttack(npcPokemon, trainerPokemon);
+        assertEquals(newHP, trainerPokemon.getCurrentHp());
+    }
+
+    @Test
+    void testBattleEnd() throws PokemonNotExistException {
+        PokedexController pokedexController = getPokedexController();
+        PokemonController pokemonController = getPokemonController(pokedexController);
+        TrainerController trainerController = getTrainerController(pokemonController);
+        NPCBattleController npcBattleController =
+                getBattleController(trainerController, pokemonController);
+
+        Trainer trainer = trainerController.getTrainerForMemberId(DISCORD_USER_ID_1);
+        Pokemon trainerPokemon =
+                pokemonController.getPokemonById(trainer.getPokemonInventory().get(0));
+        NPCBattle npcBattle = npcBattleController.startBattle(trainer, trainerPokemon.getName());
+
+        npcBattleController.endBattle(npcBattle);
+        assertEquals(trainerPokemon.getHp(), trainerPokemon.getCurrentHp());
     }
 }

@@ -32,14 +32,10 @@ public class NPCBattleCommand implements SlashCommandHandler, ButtonHandler {
     private static String trainerDiscordId;
     private static NPCBattle npcBattle;
 
-    @Inject
-    NPCBattleController npcBattleController;
-    @Inject
-    PokemonController pokemonController;
-    @Inject
-    TrainerController trainerController;
-    @Inject
-    PokedexController pokedexController;
+    @Inject NPCBattleController npcBattleController;
+    @Inject PokemonController pokemonController;
+    @Inject TrainerController trainerController;
+    @Inject PokedexController pokedexController;
 
     @Inject
     public NPCBattleCommand() {
@@ -79,37 +75,50 @@ public class NPCBattleCommand implements SlashCommandHandler, ButtonHandler {
             setNpcBattle(npcBattleController.startBattle(trainer, pokemonName));
             Pokemon npcPokemon = npcBattle.getNpcPokemon();
             Pokemon trainerPokemon = npcBattle.getTrainerPokemon();
-            PokemonSpecies npcPokemonSpecies = pokedexController
-                    .getPokemonSpeciesByNumber(npcPokemon.getPokedexNumber());
+            PokemonSpecies npcPokemonSpecies =
+                    pokedexController.getPokemonSpeciesByNumber(npcPokemon.getPokedexNumber());
 
             EmbedBuilder embedBuilder = new EmbedBuilder();
             embedBuilder.setTitle(
                     String.format("You have encountered a wild %s!", npcPokemon.getName()));
 
             StringBuilder npcPokemonStatus = new StringBuilder();
-            npcPokemonStatus.append("HP: " + npcPokemon.getHp() +
-                    "\nAttack: " + npcPokemon.getAttack() +
-                    "\nSpecial Attack: " + npcPokemon.getSpecialAttack() +
-                    "\nDefense: " + npcPokemon.getDefense() +
-                    "\nSpecial Defense: " + npcPokemon.getSpecialDefense());
+            npcPokemonStatus.append(
+                    "HP: "
+                            + npcPokemon.getHp()
+                            + "\nAttack: "
+                            + npcPokemon.getAttack()
+                            + "\nSpecial Attack: "
+                            + npcPokemon.getSpecialAttack()
+                            + "\nDefense: "
+                            + npcPokemon.getDefense()
+                            + "\nSpecial Defense: "
+                            + npcPokemon.getSpecialDefense());
 
             embedBuilder.addField("Enemy Pokemon", npcPokemonStatus.toString(), false);
 
             StringBuilder yourPokemonStatus = new StringBuilder();
-            yourPokemonStatus.append("HP: " + trainerPokemon.getHp() +
-                    "\nAttack: " + trainerPokemon.getAttack() +
-                    "\nSpecial Attack: " + trainerPokemon.getSpecialAttack() +
-                    "\nDefense: " + trainerPokemon.getDefense() +
-                    "\nSpecial Defense: " + trainerPokemon.getSpecialDefense());
+            yourPokemonStatus.append(
+                    "HP: "
+                            + trainerPokemon.getHp()
+                            + "\nAttack: "
+                            + trainerPokemon.getAttack()
+                            + "\nSpecial Attack: "
+                            + trainerPokemon.getSpecialAttack()
+                            + "\nDefense: "
+                            + trainerPokemon.getDefense()
+                            + "\nSpecial Defense: "
+                            + trainerPokemon.getSpecialDefense());
 
             embedBuilder.addField("Your Pokemon", yourPokemonStatus.toString(), true);
 
             embedBuilder.setThumbnail(npcPokemonSpecies.getImageUrl());
 
             MessageCreateBuilder messageCreateBuilder = new MessageCreateBuilder();
-            messageCreateBuilder = messageCreateBuilder.addActionRow(
-                    Button.primary(getName() + ":start", "Start Battle"),
-                    Button.danger(getName() + ":forfeit", "Forfeit"));
+            messageCreateBuilder =
+                    messageCreateBuilder.addActionRow(
+                            Button.primary(getName() + ":start", "Start Battle"),
+                            Button.danger(getName() + ":forfeit", "Forfeit"));
             messageCreateBuilder = messageCreateBuilder.addEmbeds(embedBuilder.build());
             event.reply(messageCreateBuilder.build()).setEphemeral(true).queue();
         }
@@ -134,7 +143,8 @@ public class NPCBattleCommand implements SlashCommandHandler, ButtonHandler {
             }
 
             Button attackButton = Button.primary(getName() + ":attack", "Attack");
-            Button specialAttackButton = Button.primary(getName() + ":specialAttack", "SpecialAttack");
+            Button specialAttackButton =
+                    Button.primary(getName() + ":specialAttack", "SpecialAttack");
             Button forfeitButton = Button.danger(getName() + ":forfeit", "Forfeit");
             event.getHook()
                     .editOriginalEmbeds(buildEmbed(title.toString()).build())
@@ -154,18 +164,14 @@ public class NPCBattleCommand implements SlashCommandHandler, ButtonHandler {
                     npcBattle.getTrainerPokemon(), npcBattle.getNpcPokemon());
             npcBattleController.performNPCAttack(getNpcBattle());
             message = "Your pokemon basic attacked enemy pokemon." + "\nYou have been attacked!";
-            event.getHook()
-                    .editOriginalEmbeds(buildEmbed(message).build())
-                    .queue();
+            event.getHook().editOriginalEmbeds(buildEmbed(message).build()).queue();
 
         } else if (buttonId.endsWith(":specialAttack")) {
             npcBattleController.specialAttack(
                     npcBattle.getTrainerPokemon(), npcBattle.getNpcPokemon());
             npcBattleController.performNPCAttack(getNpcBattle());
             message = "Your pokemon special attacked enemy pokemon." + "\nYou have been attacked!";
-            event.getHook()
-                    .editOriginalEmbeds(buildEmbed(message).build())
-                    .queue();
+            event.getHook().editOriginalEmbeds(buildEmbed(message).build()).queue();
         }
         // checks battle end conditions after interaction
         if (npcBattleController.checkIfBattleEnds(npcBattle)) {
@@ -202,7 +208,8 @@ public class NPCBattleCommand implements SlashCommandHandler, ButtonHandler {
     private EmbedBuilder buildEmbed(String title) {
         Pokemon npcPokemon = npcBattle.getNpcPokemon();
         Pokemon trainerPokemon = npcBattle.getTrainerPokemon();
-        PokemonSpecies npcPokemonSpecies = pokedexController.getPokemonSpeciesByNumber(npcPokemon.getPokedexNumber());
+        PokemonSpecies npcPokemonSpecies =
+                pokedexController.getPokemonSpeciesByNumber(npcPokemon.getPokedexNumber());
         EmbedBuilder embedBuilder = new EmbedBuilder();
         embedBuilder.setTitle(title);
         embedBuilder.addField("Enemy Pokemon", "HP: " + npcPokemon.getCurrentHp(), false);
