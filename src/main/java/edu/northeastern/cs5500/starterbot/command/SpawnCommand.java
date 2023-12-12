@@ -58,14 +58,13 @@ public class SpawnCommand implements SlashCommandHandler, ButtonHandler {
 
         EmbedBuilder embedBuilder = new EmbedBuilder();
         embedBuilder.setTitle(String.format("A wild %s appears!", species.getName()));
-        // embedBuilder.addField("Level", Integer.toString(pokemon.getLevel()), false);
+
         List<PokemonType> types = pokemon.getTypes();
         StringBuilder typesString = new StringBuilder();
         for (int i = 0; i < types.size(); i++) {
             PokemonType type = types.get(i);
             typesString.append(type.getName()).append(" ").append(type.getEmoji());
 
-            // Add a comma and space if it's not the last type
             if (i < types.size() - 1) {
                 typesString.append(", ");
             }
