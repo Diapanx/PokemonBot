@@ -119,11 +119,4 @@ public class CommandModule {
     public SlashCommandHandler provideHelpCommand(HelpCommand helpCommand) {
         return helpCommand;
     }
-
-    @Provides
-    @IntoMap
-    @StringKey(HelpCommand.NAME)
-    public SlashCommandHandler provideHelpCommand(HelpCommand helpCommand) {
-        return helpCommand;
-    }
 }
