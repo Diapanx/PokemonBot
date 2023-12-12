@@ -39,20 +39,6 @@ public class CommandModule {
 
     @Provides
     @IntoMap
-    @StringKey(ButtonCommand.NAME)
-    public SlashCommandHandler provideButtonCommand(ButtonCommand buttonCommand) {
-        return buttonCommand;
-    }
-
-    @Provides
-    @IntoMap
-    @StringKey(ButtonCommand.NAME)
-    public ButtonHandler provideButtonCommandClickHandler(ButtonCommand buttonCommand) {
-        return buttonCommand;
-    }
-
-    @Provides
-    @IntoMap
     @StringKey(DropdownCommand.NAME)
     public SlashCommandHandler provideDropdownCommand(DropdownCommand dropdownCommand) {
         return dropdownCommand;
