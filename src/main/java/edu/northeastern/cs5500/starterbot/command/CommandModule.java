@@ -102,6 +102,19 @@ public class CommandModule {
 
     @Provides
     @IntoMap
+    @StringKey(NPCBattleCommand.NAME)
+    public SlashCommandHandler provideNPCBattleCommand(NPCBattleCommand npcBattleCommand) {
+        return npcBattleCommand;
+    }
+
+    @Provides
+    @IntoMap
+    @StringKey(NPCBattleCommand.NAME)
+    public ButtonHandler provideNPCBattleCommandClickHandler(NPCBattleCommand npcBattleCommand) {
+        return npcBattleCommand;
+
+    @Provides
+    @IntoMap
     @StringKey(HelpCommand.NAME)
     public SlashCommandHandler provideHelpCommand(HelpCommand helpCommand) {
         return helpCommand;
