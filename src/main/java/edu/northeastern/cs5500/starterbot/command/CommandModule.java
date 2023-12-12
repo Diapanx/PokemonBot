@@ -17,14 +17,6 @@ public class CommandModule {
 
     @Provides
     @IntoMap
-    @StringKey(PreferredNameCommand.NAME)
-    public SlashCommandHandler providePreferredNameCommand(
-            PreferredNameCommand preferredNameCommand) {
-        return preferredNameCommand;
-    }
-
-    @Provides
-    @IntoMap
     @StringKey(DropdownCommand.NAME)
     public SlashCommandHandler provideDropdownCommand(DropdownCommand dropdownCommand) {
         return dropdownCommand;
