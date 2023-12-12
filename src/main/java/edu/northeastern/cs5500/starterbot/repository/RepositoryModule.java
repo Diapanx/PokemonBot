@@ -5,7 +5,6 @@ import dagger.Provides;
 import edu.northeastern.cs5500.starterbot.model.Pokemon;
 import edu.northeastern.cs5500.starterbot.model.TradeOffer;
 import edu.northeastern.cs5500.starterbot.model.Trainer;
-import edu.northeastern.cs5500.starterbot.model.UserPreference;
 
 @Module
 public class RepositoryModule {
@@ -18,17 +17,6 @@ public class RepositoryModule {
     @Provides
     public Class<Pokemon> providePokemon() {
         return Pokemon.class;
-    }
-
-    @Provides
-    public GenericRepository<UserPreference> provideUserPreferencesRepository(
-            MongoDBRepository<UserPreference> repository) {
-        return repository;
-    }
-
-    @Provides
-    public Class<UserPreference> provideUserPreference() {
-        return UserPreference.class;
     }
 
     // NOTE: You can use the following lines if you'd like to store objects in
@@ -45,11 +33,6 @@ public class RepositoryModule {
     public Class<Trainer> provideTrainer() {
         return Trainer.class;
     }
-    // @Provides
-    // public GenericRepository<UserPreference> provideUserPreferencesRepository(
-    // InMemoryRepository<UserPreference> repository) {
-    // return repository;
-    // }
 
     @Provides
     public Class<TradeOffer> provideTradeOffer() {
