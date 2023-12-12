@@ -107,7 +107,7 @@ class NPCBattleControllerTest {
         NPCBattle npcBattle = npcBattleController.startBattle(trainer, trainerPokemon.getName());
 
         Pokemon npcPokemon = npcBattle.getNpcPokemon();
-        Integer damage = Math.min(1, npcPokemon.getAttack() - trainerPokemon.getDefense());
+        Integer damage = Math.max(1, npcPokemon.getAttack() - trainerPokemon.getDefense());
         Integer newHP = Math.max(0, trainerPokemon.getCurrentHp() - damage);
 
         npcBattleController.basicAttack(npcPokemon, trainerPokemon);
@@ -129,7 +129,7 @@ class NPCBattleControllerTest {
 
         Pokemon npcPokemon = npcBattle.getNpcPokemon();
         Integer damage =
-                Math.min(1, npcPokemon.getSpecialAttack() - trainerPokemon.getSpecialDefense());
+                Math.max(1, npcPokemon.getSpecialAttack() - trainerPokemon.getSpecialDefense());
         Integer newHP = Math.max(0, trainerPokemon.getCurrentHp() - damage);
 
         npcBattleController.specialAttack(npcPokemon, trainerPokemon);

@@ -51,7 +51,7 @@ public class NPCBattleController {
 
     public void basicAttack(Pokemon attackPokemon, Pokemon defensePokemon) {
         // deals minimum 1 damage if attack is less than defense.
-        int damage = Math.min(1, attackPokemon.getAttack() - defensePokemon.getDefense());
+        int damage = Math.max(1, attackPokemon.getAttack() - defensePokemon.getDefense());
         int newHP = Math.max(0, defensePokemon.getCurrentHp() - damage);
         defensePokemon.setCurrentHp(newHP);
     }
@@ -59,7 +59,7 @@ public class NPCBattleController {
     public void specialAttack(Pokemon attackPokemon, Pokemon defensePokemon) {
         // deals minimum 1 damaged if attack is less than defense.
         int damage =
-                Math.min(1, attackPokemon.getSpecialAttack() - defensePokemon.getSpecialDefense());
+                Math.max(1, attackPokemon.getSpecialAttack() - defensePokemon.getSpecialDefense());
         int newHP = Math.max(0, defensePokemon.getCurrentHp() - damage);
         defensePokemon.setCurrentHp(newHP);
     }
