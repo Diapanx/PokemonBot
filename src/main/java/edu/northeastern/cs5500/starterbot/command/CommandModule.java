@@ -32,13 +32,6 @@ public class CommandModule {
 
     @Provides
     @IntoMap
-    @StringKey(FailureCommand.NAME)
-    public SlashCommandHandler provideFailureCommand(FailureCommand failureCommand) {
-        return failureCommand;
-    }
-
-    @Provides
-    @IntoMap
     @StringKey(DropdownCommand.NAME)
     public SlashCommandHandler provideDropdownCommand(DropdownCommand dropdownCommand) {
         return dropdownCommand;
