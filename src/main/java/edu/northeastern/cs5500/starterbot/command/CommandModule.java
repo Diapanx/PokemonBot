@@ -10,13 +10,6 @@ public class CommandModule {
 
     @Provides
     @IntoMap
-    @StringKey(SayCommand.NAME)
-    public SlashCommandHandler provideSayCommand(SayCommand sayCommand) {
-        return sayCommand;
-    }
-
-    @Provides
-    @IntoMap
     @StringKey(TeamCommand.NAME)
     public SlashCommandHandler provideTeamCommand(TeamCommand teamCommand) {
         return teamCommand;
