@@ -118,6 +118,5 @@ public class CommandModule {
     @StringKey(HelpCommand.NAME)
     public SlashCommandHandler provideHelpCommand(HelpCommand helpCommand) {
         return helpCommand;
-
     }
 }
