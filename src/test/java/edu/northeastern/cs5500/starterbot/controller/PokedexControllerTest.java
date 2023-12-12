@@ -50,11 +50,9 @@ class PokedexControllerTest {
         assertEquals(pokemonName, species.getName(), "Name should match Bulbasaur");
         assertEquals(1, species.getPokedexNumber(), "Pokedex number should be 1 for Bulbasaur");
 
-        // Test types
         List<PokemonType> expectedTypes = List.of(PokemonType.GRASS, PokemonType.POISON);
         assertEquals(expectedTypes, species.getTypes(), "Types should match Grass and Poison");
 
-        // Test base stats, assuming you know the expected values for Bulbasaur
         Map<String, Integer> baseStats = species.getBase();
         assertEquals((Integer) 45, baseStats.get("HP"), "HP should be 45");
         assertEquals((Integer) 49, baseStats.get("Attack"), "Attack should be 49");
