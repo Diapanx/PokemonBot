@@ -112,6 +112,7 @@ public class CommandModule {
     @StringKey(NPCBattleCommand.NAME)
     public ButtonHandler provideNPCBattleCommandClickHandler(NPCBattleCommand npcBattleCommand) {
         return npcBattleCommand;
+    }
 
     @Provides
     @IntoMap
