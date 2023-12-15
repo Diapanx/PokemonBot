@@ -10,45 +10,9 @@ public class CommandModule {
 
     @Provides
     @IntoMap
-    @StringKey(SayCommand.NAME)
-    public SlashCommandHandler provideSayCommand(SayCommand sayCommand) {
-        return sayCommand;
-    }
-
-    @Provides
-    @IntoMap
     @StringKey(TeamCommand.NAME)
     public SlashCommandHandler provideTeamCommand(TeamCommand teamCommand) {
         return teamCommand;
-    }
-
-    @Provides
-    @IntoMap
-    @StringKey(PreferredNameCommand.NAME)
-    public SlashCommandHandler providePreferredNameCommand(
-            PreferredNameCommand preferredNameCommand) {
-        return preferredNameCommand;
-    }
-
-    @Provides
-    @IntoMap
-    @StringKey(FailureCommand.NAME)
-    public SlashCommandHandler provideFailureCommand(FailureCommand failureCommand) {
-        return failureCommand;
-    }
-
-    @Provides
-    @IntoMap
-    @StringKey(ButtonCommand.NAME)
-    public SlashCommandHandler provideButtonCommand(ButtonCommand buttonCommand) {
-        return buttonCommand;
-    }
-
-    @Provides
-    @IntoMap
-    @StringKey(ButtonCommand.NAME)
-    public ButtonHandler provideButtonCommandClickHandler(ButtonCommand buttonCommand) {
-        return buttonCommand;
     }
 
     @Provides
